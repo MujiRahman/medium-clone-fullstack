@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #fdfdfd;
+    --foreground: #0f0f0f;
+    
+    --muted: #f2f2f2;
+    --muted-foreground: #6b6b6b;
+    
+    --border: #e6e6e6;
+    --input: #e6e6e6;
+    --ring: #0f0f0f;
+    
+    --primary: #0f0f0f;
+    --primary-foreground: #fdfdfd;
+    
+    --secondary: #f2f2f2;
+    --secondary-foreground: #0f0f0f;
+  }
+
+  .dark {
+    --background: #121212;
+    --foreground: #ededed;
+    
+    --muted: #262626;
+    --muted-foreground: #a3a3a3;
+    
+    --border: #262626;
+    --input: #262626;
+    --ring: #ededed;
+    
+    --primary: #ededed;
+    --primary-foreground: #121212;
+    
+    --secondary: #262626;
+    --secondary-foreground: #ededed;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+  }
+}
+
+/* Tiptap Placeholder Plugin Style */
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
