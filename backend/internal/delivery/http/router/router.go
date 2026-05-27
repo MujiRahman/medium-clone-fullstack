@@ -1,9 +1,11 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
-
+	"os"
+	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 
 	"medium-clone/internal/delivery/http/handler"
 	"medium-clone/internal/delivery/http/middleware"
@@ -20,8 +22,19 @@ func SetupRouter(
 	r := gin.Default()
 
 	// Enable CORS for frontend integration
+	allowedOrigins := []string{"http://localhost:3000"}
+	if envOrigins := os.Getenv("ALLOWED_ORIGINS"); envOrigins != "" {
+		origins := strings.Split(envOrigins, ",")
+		for _, o := range origins {
+			trimmed := strings.TrimSpace(o)
+			if trimmed != "" {
+				allowedOrigins = append(allowedOrigins, trimmed)
+			}
+		}
+	}
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // Frontend Next.js URL
+		AllowOrigins:     allowedOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

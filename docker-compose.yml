@@ -39,6 +39,7 @@ services:
       - REDIS_PORT=6379
       - PORT=8080
       - JWT_SECRET=super_secret_jwt_key_ubah_ini_di_productionqwertyuiopasdfghjkl0987654erfghjkbvczxcv0987654wdfghjnbfde34567uikjn
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
     depends_on:
       - db
       - redis
@@ -47,12 +48,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8080/api}
     container_name: medium_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080/api
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8080/api}
       - INTERNAL_API_URL=http://backend:8080/api
     depends_on:
       - backend
