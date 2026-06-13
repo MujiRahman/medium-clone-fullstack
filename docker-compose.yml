@@ -40,6 +40,7 @@ services:
       - PORT=8080
       - JWT_SECRET=super_secret_jwt_key_ubah_ini_di_productionqwertyuiopasdfghjkl0987654erfghjkbvczxcv0987654wdfghjnbfde34567uikjn
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-AQ.Ab8RN6K7V-XcsehIPKddx5SKtDmyZ1cKNE_7tOCVcRFAdzYNHg}
     depends_on:
       - db
       - redis

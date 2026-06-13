@@ -4,6 +4,7 @@ import { calculateReadingTime, getExcerpt } from '@/lib/htmlParser';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ClapButton } from '@/components/ClapButton';
 import { ThreadedComments } from "@/components/ThreadedComments";
+import { AudioReader } from '@/components/AudioReader';
 
 interface Story {
   id: string;
@@ -125,7 +126,7 @@ export default async function StoryPage({ params }: PageProps) {
           <h1 className="font-sans text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-6">
             {story.title}
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-6">
             {/* Avatar Placeholder */}
             <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground">
               {story.author.username.charAt(0).toUpperCase()}
@@ -137,6 +138,7 @@ export default async function StoryPage({ params }: PageProps) {
               </span>
             </div>
           </div>
+          <AudioReader content={story.content} />
         </header>
 
         {/* Story Body Canvas */}

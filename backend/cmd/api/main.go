@@ -36,14 +36,17 @@ func main() {
 	commentRepo := postgres.NewCommentRepository(db)
 	commentUseCase := usecase.NewCommentUseCase(commentRepo)
 
+	aiUseCase := usecase.NewAIUseCase()
+
 	// 3. Init Handlers
 	authHandler := handler.NewAuthHandler(authUseCase)
 	userHandler := handler.NewUserHandler()
 	storyHandler := handler.NewStoryHandler(storyUseCase)
 	commentHandler := handler.NewCommentHandler(commentUseCase)
+	aiHandler := handler.NewAIHandler(aiUseCase)
 
 	// 4. Setup Router
-	r := router.SetupRouter(authHandler, userHandler, storyHandler, commentHandler)
+	r := router.SetupRouter(authHandler, userHandler, storyHandler, commentHandler, aiHandler)
 
 	// 5. Run Server
 	port := os.Getenv("PORT")

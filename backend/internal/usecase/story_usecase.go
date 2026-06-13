@@ -20,6 +20,8 @@ type UpdateStoryReq struct {
 	Title   string  `json:"title"`
 	Content string  `json:"content"`
 	Status  *string `json:"status"` // Optional field, if changing to published
+	TLDR    string  `json:"tldr"`
+	Tags    string  `json:"tags"`
 }
 
 type AddClapReq struct {
@@ -88,6 +90,12 @@ func (u *storyUseCase) UpdateStory(reqUserID uuid.UUID, storyID uuid.UUID, req U
 	}
 	if req.Content != "" {
 		story.Content = req.Content
+	}
+	if req.TLDR != "" {
+		story.TLDR = req.TLDR
+	}
+	if req.Tags != "" {
+		story.Tags = req.Tags
 	}
 
 	if req.Status != nil {

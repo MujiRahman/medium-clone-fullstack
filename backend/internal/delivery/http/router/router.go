@@ -18,6 +18,7 @@ func SetupRouter(
 	userHandler *handler.UserHandler,
 	storyHandler *handler.StoryHandler,
 	commentHandler *handler.CommentHandler,
+	aiHandler *handler.AIHandler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -77,6 +78,12 @@ func SetupRouter(
 				stories.PUT("/:id", storyHandler.UpdateStory)
 				stories.POST("/:id/clap", storyHandler.ClapStory)
 				stories.POST("/:id/comments", commentHandler.CreateComment)
+			}
+
+			// AI Routes
+			ai := protected.Group("/ai")
+			{
+				ai.POST("/generate", aiHandler.Generate)
 			}
 		}
 	}
