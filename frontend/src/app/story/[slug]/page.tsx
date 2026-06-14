@@ -5,6 +5,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { ClapButton } from '@/components/ClapButton';
 import { ThreadedComments } from "@/components/ThreadedComments";
 import { AudioReader } from '@/components/AudioReader';
+import { AnalyticsTracker } from '@/components/AnalyticsTracker';
 
 interface Story {
   id: string;
@@ -121,6 +122,7 @@ export default async function StoryPage({ params }: PageProps) {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 pt-12 pb-24">
+        <AnalyticsTracker storyId={story.id} />
         {/* Story Meta Header */}
         <header className="mb-10">
           <h1 className="font-sans text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-6">

@@ -19,6 +19,7 @@ func SetupRouter(
 	storyHandler *handler.StoryHandler,
 	commentHandler *handler.CommentHandler,
 	aiHandler *handler.AIHandler,
+	analyticsHandler *handler.AnalyticsHandler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -56,6 +57,7 @@ func SetupRouter(
 		api.GET("/stories/:slug", storyHandler.GetStoryBySlug)
 		api.GET("/stories", storyHandler.GetStories)
 		api.GET("/stories/:slug/comments", commentHandler.GetStoryComments)
+		api.POST("/analytics/track", analyticsHandler.Track)
 
 		// Protected Routes
 		protected := api.Group("/")
@@ -63,6 +65,9 @@ func SetupRouter(
 		{
 			// Auth
 			protected.GET("/auth/me", authHandler.GetMe)
+
+			// Analytics Stats
+			protected.GET("/me/stats", analyticsHandler.GetStats)
 
 			// Users Routes
 			users := protected.Group("/users")

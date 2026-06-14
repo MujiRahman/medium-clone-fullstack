@@ -31,6 +31,9 @@ export function HeaderNav() {
           <span className="text-sm text-muted-foreground mr-2 hidden sm:inline-block">
             Hi, {user?.username}
           </span>
+          <Link href="/me/stats" className="text-sm text-muted-foreground hover:text-foreground transition-colors mr-2 hidden sm:inline-block">
+            Stats
+          </Link>
           <Link href="/new-story">
             <Button className="rounded-full bg-green-600 hover:bg-green-700 text-white">Write</Button>
           </Link>

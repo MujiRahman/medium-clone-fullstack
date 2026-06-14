@@ -41,6 +41,7 @@ func InitDatabase() *gorm.DB {
 		&domain.Story{},
 		&domain.Clap{},
 		&domain.Comment{},
+		&domain.ArticleAnalytics{},
 	)
 	if err != nil {
 		log.Fatal("Failed to auto migrate database:", err)

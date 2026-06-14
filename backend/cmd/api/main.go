@@ -38,15 +38,19 @@ func main() {
 
 	aiUseCase := usecase.NewAIUseCase()
 
+	analyticsRepo := postgres.NewAnalyticsRepository(db)
+	analyticsUseCase := usecase.NewAnalyticsUseCase(analyticsRepo, aiUseCase)
+
 	// 3. Init Handlers
 	authHandler := handler.NewAuthHandler(authUseCase)
 	userHandler := handler.NewUserHandler()
 	storyHandler := handler.NewStoryHandler(storyUseCase)
 	commentHandler := handler.NewCommentHandler(commentUseCase)
 	aiHandler := handler.NewAIHandler(aiUseCase)
+	analyticsHandler := handler.NewAnalyticsHandler(analyticsUseCase)
 
 	// 4. Setup Router
-	r := router.SetupRouter(authHandler, userHandler, storyHandler, commentHandler, aiHandler)
+	r := router.SetupRouter(authHandler, userHandler, storyHandler, commentHandler, aiHandler, analyticsHandler)
 
 	// 5. Run Server
 	port := os.Getenv("PORT")
