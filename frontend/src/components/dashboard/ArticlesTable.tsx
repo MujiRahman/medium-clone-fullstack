@@ -2,29 +2,9 @@ import React from "react";
 import { ArticlesTableClient } from "./ArticlesTableClient";
 
 interface ArticlesTableProps {
-  timeframe: string;
-  token: string | undefined;
+  data: any;
 }
 
-export async function ArticlesTable({ timeframe, token }: ArticlesTableProps) {
-  let articles = [];
-
-  try {
-    const apiURL = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
-    const res = await fetch(`${apiURL}/me/stats?timeframe=${timeframe}`, {
-      headers: {
-        Cookie: `jwt_token=${token}`,
-      },
-      cache: "no-store",
-    });
-
-    if (res.ok) {
-      const payload = await res.json();
-      articles = payload.data?.articles || [];
-    }
-  } catch (error) {
-    console.error("Failed to fetch articles table:", error);
-  }
-
-  return <ArticlesTableClient articles={articles} />;
+export function ArticlesTable({ data }: ArticlesTableProps) {
+  return <ArticlesTableClient articles={data.articles || []} />;
 }

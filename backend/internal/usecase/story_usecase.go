@@ -3,12 +3,15 @@ package usecase
 import (
 	"errors"
 	"time"
+	"context"
+	"fmt"
 
 	"medium-clone/internal/domain"
 	"medium-clone/internal/repository/postgres"
 	"medium-clone/pkg/utils"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 )
 
 type CreateStoryReq struct {
@@ -34,11 +37,14 @@ type StoryUseCase interface {
 	GetPublishedStoryBySlug(slug string) (*domain.Story, error)
 	GetPublishedStories() ([]*domain.Story, error)
 	AddClap(userID uuid.UUID, storyID uuid.UUID, req AddClapReq) (*domain.Clap, error)
+	GetStoryByID(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error)
+	DeleteStory(reqUserID uuid.UUID, storyID uuid.UUID) error
 }
 
 type storyUseCase struct {
 	storyRepo postgres.StoryRepository
 	clapRepo  postgres.ClapRepository
+	rdb       *redis.Client
 }
 
 var (
@@ -47,10 +53,11 @@ var (
 	ErrMaxClapsExceed = errors.New("maximum 50 claps exceeded for this story")
 )
 
-func NewStoryUseCase(storyRepo postgres.StoryRepository, clapRepo postgres.ClapRepository) StoryUseCase {
+func NewStoryUseCase(storyRepo postgres.StoryRepository, clapRepo postgres.ClapRepository, rdb *redis.Client) StoryUseCase {
 	return &storyUseCase{
 		storyRepo: storyRepo,
 		clapRepo:  clapRepo,
+		rdb:       rdb,
 	}
 }
 
@@ -66,6 +73,11 @@ func (u *storyUseCase) CreateDraft(authorID uuid.UUID, req CreateStoryReq) (*dom
 	if err := u.storyRepo.CreateStory(story); err != nil {
 		return nil, err
 	}
+
+	// Invalidate insights cache
+	ctx := context.Background()
+	u.rdb.Del(ctx, fmt.Sprintf("insights:%s", authorID.String()))
+
 	return story, nil
 }
 
@@ -111,6 +123,10 @@ func (u *storyUseCase) UpdateStory(reqUserID uuid.UUID, storyID uuid.UUID, req U
 	if err := u.storyRepo.UpdateStory(story); err != nil {
 		return nil, err
 	}
+
+	// Invalidate insights cache
+	ctx := context.Background()
+	u.rdb.Del(ctx, fmt.Sprintf("insights:%s", reqUserID.String()))
 
 	return story, nil
 }
@@ -173,4 +189,33 @@ func (u *storyUseCase) AddClap(userID uuid.UUID, storyID uuid.UUID, req AddClapR
 	}
 
 	return clap, nil
+}
+
+func (u *storyUseCase) GetStoryByID(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error) {
+	story, err := u.storyRepo.GetByID(storyID)
+	if err != nil {
+		return nil, err
+	}
+	if story == nil {
+		return nil, ErrStoryNotFound
+	}
+	// Validate authorization
+	if story.AuthorID != reqUserID {
+		return nil, ErrForbidden
+	}
+	return story, nil
+}
+
+func (u *storyUseCase) DeleteStory(reqUserID uuid.UUID, storyID uuid.UUID) error {
+	story, err := u.storyRepo.GetByID(storyID)
+	if err != nil {
+		return err
+	}
+	if story == nil {
+		return ErrStoryNotFound
+	}
+	if story.AuthorID != reqUserID {
+		return ErrForbidden
+	}
+	return u.storyRepo.DeleteStory(storyID)
 }

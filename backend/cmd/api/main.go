@@ -24,6 +24,7 @@ func main() {
 
 	// 1. Init Database (and Auto Migrate)
 	db := config.InitDatabase()
+	rdb := config.InitRedis()
 
 	// 2. Init Repositories & Usecases
 	userRepo := postgres.NewUserRepository(db)
@@ -31,7 +32,7 @@ func main() {
 	
 	storyRepo := postgres.NewStoryRepository(db)
 	clapRepo := postgres.NewClapRepository(db)
-	storyUseCase := usecase.NewStoryUseCase(storyRepo, clapRepo)
+	storyUseCase := usecase.NewStoryUseCase(storyRepo, clapRepo, rdb)
 
 	commentRepo := postgres.NewCommentRepository(db)
 	commentUseCase := usecase.NewCommentUseCase(commentRepo)
@@ -39,7 +40,7 @@ func main() {
 	aiUseCase := usecase.NewAIUseCase()
 
 	analyticsRepo := postgres.NewAnalyticsRepository(db)
-	analyticsUseCase := usecase.NewAnalyticsUseCase(analyticsRepo, aiUseCase)
+	analyticsUseCase := usecase.NewAnalyticsUseCase(analyticsRepo, aiUseCase, rdb)
 
 	// 3. Init Handlers
 	authHandler := handler.NewAuthHandler(authUseCase)

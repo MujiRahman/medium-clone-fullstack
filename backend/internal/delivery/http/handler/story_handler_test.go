@@ -23,6 +23,8 @@ type mockStoryUseCase struct {
 	mockGetPublished     func(slug string) (*domain.Story, error)
 	mockGetPublishedStories func() ([]*domain.Story, error)
 	mockAddClap          func(userID uuid.UUID, storyID uuid.UUID, req usecase.AddClapReq) (*domain.Clap, error)
+	mockGetStoryByID     func(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error)
+	mockDeleteStory      func(reqUserID uuid.UUID, storyID uuid.UUID) error
 }
 
 func (m *mockStoryUseCase) CreateDraft(authorID uuid.UUID, req usecase.CreateStoryReq) (*domain.Story, error) {
@@ -42,6 +44,18 @@ func (m *mockStoryUseCase) GetPublishedStories() ([]*domain.Story, error) {
 }
 func (m *mockStoryUseCase) AddClap(userID uuid.UUID, storyID uuid.UUID, req usecase.AddClapReq) (*domain.Clap, error) {
 	return m.mockAddClap(userID, storyID, req)
+}
+func (m *mockStoryUseCase) GetStoryByID(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error) {
+	if m.mockGetStoryByID != nil {
+		return m.mockGetStoryByID(reqUserID, storyID)
+	}
+	return nil, nil
+}
+func (m *mockStoryUseCase) DeleteStory(reqUserID uuid.UUID, storyID uuid.UUID) error {
+	if m.mockDeleteStory != nil {
+		return m.mockDeleteStory(reqUserID, storyID)
+	}
+	return nil
 }
 
 // Dummy middleware to inject user_id context for protected routes

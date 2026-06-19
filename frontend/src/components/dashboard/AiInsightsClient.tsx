@@ -24,9 +24,9 @@ export function AiInsightsClient({ aiInsights }: AiInsightsClientProps) {
           <span className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 animate-pulse text-violet-500" /> AI Insights Recommendations
           </span>
-          <span className="text-[10px] bg-violet-500/10 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full font-bold">
+          {/* <span className="text-[10px] bg-violet-500/10 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full font-bold">
             Powered by Gemini
-          </span>
+          </span> */}
         </div>
 
         <div className="flex flex-col gap-3 overflow-y-auto max-h-[210px] pr-1">

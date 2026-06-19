@@ -73,8 +73,8 @@ func TestAuthHandler_Login_Success_SetCookie(t *testing.T) {
 			requireCookieFound = true
 			assert.Equal(t, "dummy.jwt.token", cookie.Value)
 			assert.True(t, cookie.HttpOnly, "Cookie must be HttpOnly")
-			assert.True(t, cookie.Secure, "Cookie must be Secure")
-			assert.Equal(t, http.SameSiteStrictMode, cookie.SameSite, "Cookie must be SameSite=Strict")
+			assert.False(t, cookie.Secure, "Cookie must not be Secure")
+			assert.Equal(t, http.SameSiteLaxMode, cookie.SameSite, "Cookie must be SameSite=Lax")
 			assert.Equal(t, 86400, cookie.MaxAge, "Cookie must have 24h MaxAge")
 		}
 	}

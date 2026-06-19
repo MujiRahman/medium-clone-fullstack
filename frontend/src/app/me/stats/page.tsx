@@ -53,6 +53,25 @@ export default async function MeStatsPage({
     console.error("Failed to fetch user profile in stats server page:", error);
   }
 
+  // 3. Fetch all dashboard stats ONCE
+  let statsData: any = {};
+  try {
+    const apiURL = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+    const res = await fetch(`${apiURL}/me/stats?timeframe=${timeframe}`, {
+      headers: {
+        Cookie: `jwt_token=${token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (res.ok) {
+      const payload = await res.json();
+      statsData = payload.data || {};
+    }
+  } catch (error) {
+    console.error("Failed to fetch dashboard stats:", error);
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navbar */}
@@ -90,18 +109,18 @@ export default async function MeStatsPage({
 
         {/* 1. Summary Cards Section */}
         <Suspense key={`summary-${timeframe}`} fallback={<SnapshotCardsSkeleton />}>
-          <SnapshotCards timeframe={timeframe} token={token} />
+          <SnapshotCards data={statsData} />
         </Suspense>
 
         {/* 2. Trends & Sources Section */}
         <Suspense key={`trends-${timeframe}`} fallback={<ChartSkeleton />}>
-          <TrendsChart timeframe={timeframe} token={token} />
+          <TrendsChart data={statsData} />
         </Suspense>
 
         {/* 3. Top Tags & AI Insights Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <Suspense key={`tags-${timeframe}`} fallback={<TopTagsSkeleton />}>
-            <TopTags timeframe={timeframe} token={token} />
+            <TopTags data={statsData} />
           </Suspense>
           <Suspense key={`ai-${timeframe}`} fallback={<AiInsightsSkeleton />}>
             <AiInsights timeframe={timeframe} token={token} />
@@ -110,7 +129,7 @@ export default async function MeStatsPage({
 
         {/* 4. Articles Performance List */}
         <Suspense key={`articles-${timeframe}`} fallback={<ArticlesTableSkeleton />}>
-          <ArticlesTable timeframe={timeframe} token={token} />
+          <ArticlesTable data={statsData} />
         </Suspense>
       </main>
     </div>

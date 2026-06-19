@@ -68,6 +68,7 @@ func SetupRouter(
 
 			// Analytics Stats
 			protected.GET("/me/stats", analyticsHandler.GetStats)
+			protected.GET("/me/stats/insights", analyticsHandler.GetInsights)
 
 			// Users Routes
 			users := protected.Group("/users")
@@ -80,7 +81,9 @@ func SetupRouter(
 			stories := protected.Group("/stories")
 			{
 				stories.POST("", storyHandler.CreateStory)
+				stories.GET("/id/:id", storyHandler.GetStoryByID)
 				stories.PUT("/:id", storyHandler.UpdateStory)
+				stories.DELETE("/:id", storyHandler.DeleteStory)
 				stories.POST("/:id/clap", storyHandler.ClapStory)
 				stories.POST("/:id/comments", commentHandler.CreateComment)
 			}

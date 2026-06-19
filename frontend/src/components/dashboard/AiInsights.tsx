@@ -11,7 +11,8 @@ export async function AiInsights({ timeframe, token }: AiInsightsProps) {
 
   try {
     const apiURL = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
-    const res = await fetch(`${apiURL}/me/stats?timeframe=${timeframe}`, {
+    // Fetch directly from the new insights endpoint
+    const res = await fetch(`${apiURL}/me/stats/insights`, {
       headers: {
         Cookie: `jwt_token=${token}`,
       },
@@ -20,7 +21,7 @@ export async function AiInsights({ timeframe, token }: AiInsightsProps) {
 
     if (res.ok) {
       const payload = await res.json();
-      aiInsights = payload.data?.aiInsights || [];
+      aiInsights = payload.data || [];
     }
   } catch (error) {
     console.error("Failed to fetch AI insights:", error);

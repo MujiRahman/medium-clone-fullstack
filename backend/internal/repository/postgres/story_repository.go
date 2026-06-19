@@ -15,6 +15,7 @@ type StoryRepository interface {
 	GetBySlug(slug string) (*domain.Story, error)
 	GetPublishedStories() ([]*domain.Story, error)
 	UpdateStory(story *domain.Story) error
+	DeleteStory(id uuid.UUID) error
 }
 
 type storyRepository struct {
@@ -24,6 +25,11 @@ type storyRepository struct {
 func NewStoryRepository(db *gorm.DB) StoryRepository {
 	return &storyRepository{db}
 }
+
+func (r *storyRepository) DeleteStory(id uuid.UUID) error {
+	return r.db.Delete(&domain.Story{}, "id = ?", id).Error
+}
+
 
 func (r *storyRepository) CreateStory(story *domain.Story) error {
 	return r.db.Create(story).Error

@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
-import { BookOpen } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { BookOpen, Edit, Trash2, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import api from "@/lib/api/axios";
 import { ArticleStat } from "./TopArticlesClient";
 
 interface ArticlesTableClientProps {
@@ -9,10 +11,42 @@ interface ArticlesTableClientProps {
 }
 
 export function ArticlesTableClient({ articles }: ArticlesTableClientProps) {
+  const router = useRouter();
+  const [localArticles, setLocalArticles] = useState<ArticleStat[]>(articles);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLocalArticles(articles);
+  }, [articles]);
+
   const formatAvgTime = (seconds: number) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
     return `${min}m ${sec}s`;
+  };
+
+  const handleEdit = (id: string) => {
+    router.push(`/new-story?id=${id}`);
+  };
+
+  const handleDelete = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete "${title}"?`)) {
+      return;
+    }
+
+    setDeletingId(id);
+    try {
+      await api.delete(`/stories/${id}`);
+      // Remove from local state immediately
+      setLocalArticles((prev) => prev.filter((art) => art.id !== id));
+      // Refresh server components
+      router.refresh();
+    } catch (err) {
+      console.error("Failed to delete article", err);
+      alert("Failed to delete article. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -30,15 +64,19 @@ export function ArticlesTableClient({ articles }: ArticlesTableClientProps) {
                 <th className="pb-3 pr-4 font-semibold text-right">Views</th>
                 <th className="pb-3 pr-4 font-semibold text-right">Avg Read Duration</th>
                 <th className="pb-3 pr-4 font-semibold text-right">Engagement Rate</th>
-                <th className="pb-3 font-semibold text-right">Read-Through (RTR)</th>
+                <th className="pb-3 pr-4 font-semibold text-right">Read-Through (RTR)</th>
+                <th className="pb-3 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/40">
-              {articles && articles.length > 0 ? (
-                articles.map((article) => (
+              {localArticles && localArticles.length > 0 ? (
+                localArticles.map((article) => (
                   <tr key={article.id} className="group hover:bg-secondary/15 transition-colors">
                     <td className="py-3.5 font-medium max-w-sm sm:max-w-md truncate pr-4 text-foreground/95">
-                      <span className="hover:underline cursor-pointer">
+                      <span 
+                        onClick={() => handleEdit(article.id)}
+                        className="hover:underline cursor-pointer font-serif"
+                      >
                         {article.title}
                       </span>
                     </td>
@@ -56,7 +94,7 @@ export function ArticlesTableClient({ articles }: ArticlesTableClientProps) {
                         </span>
                       </div>
                     </td>
-                    <td className="py-3.5 text-right font-semibold">
+                    <td className="py-3.5 pr-4 text-right font-semibold">
                       <div className="flex items-center justify-end gap-2">
                         <span className="font-mono text-violet-600 dark:text-violet-400">
                           {article.readThroughRate}%
@@ -69,11 +107,34 @@ export function ArticlesTableClient({ articles }: ArticlesTableClientProps) {
                         </div>
                       </div>
                     </td>
+                    <td className="py-3.5 text-right font-medium">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => handleEdit(article.id)}
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-violet-600 hover:bg-violet-500/10 transition-colors"
+                          title="Edit Article"
+                        >
+                          <Edit className="w-4.5 h-4.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(article.id, article.title)}
+                          disabled={deletingId === article.id}
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                          title="Delete Article"
+                        >
+                          {deletingId === article.id ? (
+                            <Loader2 className="w-4.5 h-4.5 animate-spin text-red-500" />
+                          ) : (
+                            <Trash2 className="w-4.5 h-4.5" />
+                          )}
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-muted-foreground text-xs">
+                  <td colSpan={6} className="py-12 text-center text-muted-foreground text-xs">
                     No articles found. Write some articles to view performance metrics!
                   </td>
                 </tr>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
@@ -27,8 +27,10 @@ import {
 
 type SaveStatus = "Saved to drafts" | "Saving..." | "Failed to save";
 
-export default function NewStoryPage() {
+function NewStoryEditor() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("id");
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   
   // States
@@ -172,6 +174,32 @@ export default function NewStoryPage() {
   // Track previous to prevent firing immediately on mount if empty
   const prevDebouncedTitle = useRef(debouncedTitle);
   const prevDebouncedContent = useRef(debouncedContent);
+
+  useEffect(() => {
+    if (!editor || !editId) return;
+
+    const loadStory = async () => {
+      try {
+        const res = await api.get(`/stories/id/${editId}`);
+        const story = res.data.data;
+        if (story) {
+          setTitle(story.title || "");
+          setStoryId(story.id);
+          setStoryTldr(story.tldr || "");
+          setStoryTags(story.tags || "");
+          editor.commands.setContent(story.content || "");
+
+          // Update refs so autosave doesn't trigger immediately
+          prevDebouncedTitle.current = story.title || "";
+          prevDebouncedContent.current = story.content || "";
+        }
+      } catch (error) {
+        console.error("Failed to load story for edit:", error);
+      }
+    };
+
+    loadStory();
+  }, [editor, editId]);
 
   useEffect(() => {
     // Determine if an actual change occurred post mount
@@ -621,5 +649,13 @@ export default function NewStoryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function NewStoryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading editor...</div>}>
+      <NewStoryEditor />
+    </Suspense>
   );
 }

@@ -9,24 +9,29 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"context"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 )
 
 type AnalyticsUseCase interface {
 	TrackView(articleID uuid.UUID, source string, duration int) error
 	GetStats(authorID uuid.UUID, timeframe string) (*domain.DashboardStats, error)
+	GetInsights(authorID uuid.UUID) ([]domain.AIInsight, error)
 }
 
 type analyticsUseCase struct {
 	analyticsRepo postgres.AnalyticsRepository
 	aiUseCase     AIUseCase
+	rdb           *redis.Client
 }
 
-func NewAnalyticsUseCase(repo postgres.AnalyticsRepository, aiUC AIUseCase) AnalyticsUseCase {
+func NewAnalyticsUseCase(repo postgres.AnalyticsRepository, aiUC AIUseCase, rdb *redis.Client) AnalyticsUseCase {
 	return &analyticsUseCase{
 		analyticsRepo: repo,
 		aiUseCase:     aiUC,
+		rdb:           rdb,
 	}
 }
 
@@ -306,8 +311,43 @@ func (u *analyticsUseCase) GetStats(authorID uuid.UUID, timeframe string) (*doma
 		return articlesStats[i].Views > articlesStats[j].Views
 	})
 
-	// 11. AI recommendations with Gemini
-	aiInsights := []domain.AIInsight{
+	// AI recommendations will be fetched asynchronously via GetInsights
+	aiInsights := []domain.AIInsight{}
+
+	return &domain.DashboardStats{
+		TotalViews:       totalViews,
+		TotalReads:       totalReads,
+		AvgReadTime:      avgReadTime,
+		ViewTrends:       trends,
+		TrafficSources:   trafficSources,
+		TagPerformance:   tagPerformance,
+		TimeDistribution: timeDistribution,
+		Articles:         articlesStats,
+		AIInsights:       aiInsights,
+	}, nil
+}
+
+func (u *analyticsUseCase) GetInsights(authorID uuid.UUID) ([]domain.AIInsight, error) {
+	ctx := context.Background()
+	cacheKey := fmt.Sprintf("insights:%s", authorID.String())
+
+	// 1. Check Redis Cache First
+	cached, err := u.rdb.Get(ctx, cacheKey).Result()
+	if err == nil && cached != "" {
+		var insights []domain.AIInsight
+		if errDec := json.Unmarshal([]byte(cached), &insights); errDec == nil {
+			return insights, nil
+		}
+	}
+
+	// 2. Fetch stats for all time
+	stats, err := u.GetStats(authorID, "all")
+	if err != nil {
+		return nil, err
+	}
+
+	// 3. Fallback/Default insights if no articles
+	defaultInsights := []domain.AIInsight{
 		{
 			Type:        "optimization",
 			Title:       "Title Engagement Check",
@@ -325,13 +365,17 @@ func (u *analyticsUseCase) GetStats(authorID uuid.UUID, timeframe string) (*doma
 		},
 	}
 
-	// Compile small snippet for Gemini
+	if stats.TotalViews == 0 {
+		return defaultInsights, nil
+	}
+
+	// 4. Generate with Gemini
 	statsJSON, _ := json.Marshal(map[string]interface{}{
-		"totalViews":  totalViews,
-		"totalReads":  totalReads,
-		"avgReadTime": avgReadTime,
-		"articles":    articlesStats,
-		"topTags":     tagPerformance,
+		"totalViews":  stats.TotalViews,
+		"totalReads":  stats.TotalReads,
+		"avgReadTime": stats.AvgReadTime,
+		"articles":    stats.Articles,
+		"topTags":     stats.TagPerformance,
 	})
 
 	prompt := fmt.Sprintf(`Analyze the following writer dashboard statistics. Generate exactly 3 personalized recommendations or insights in a JSON array of objects to help the author grow their readership, optimize story engagement, and improve read completion rate.
@@ -349,7 +393,10 @@ Statistics:
 	if err == nil && aiResult != "" {
 		var generatedInsights []domain.AIInsight
 		if errDec := json.Unmarshal([]byte(aiResult), &generatedInsights); errDec == nil && len(generatedInsights) > 0 {
-			aiInsights = generatedInsights
+			// Save to Redis (no expiration, invalidated on article update/create)
+			insightsJSON, _ := json.Marshal(generatedInsights)
+			u.rdb.Set(ctx, cacheKey, insightsJSON, 0)
+			return generatedInsights, nil
 		} else {
 			fmt.Printf("Failed to decode AI insights JSON: %v. Raw response: %s\n", errDec, aiResult)
 		}
@@ -357,16 +404,6 @@ Statistics:
 		fmt.Printf("Gemini call failed for stats insights: %v\n", err)
 	}
 
-	return &domain.DashboardStats{
-		TotalViews:       totalViews,
-		TotalReads:       totalReads,
-		AvgReadTime:      avgReadTime,
-		ViewTrends:       trends,
-		TrafficSources:   trafficSources,
-		TagPerformance:   tagPerformance,
-		TimeDistribution: timeDistribution,
-		Articles:         articlesStats,
-		AIInsights:       aiInsights,
-	}, nil
+	return defaultInsights, nil
 }
 

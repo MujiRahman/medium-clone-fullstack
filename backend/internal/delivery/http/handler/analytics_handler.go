@@ -73,3 +73,18 @@ func (h *AnalyticsHandler) GetStats(c *gin.Context) {
 	response.JSON(c, http.StatusOK, "Statistics fetched successfully", stats)
 }
 
+func (h *AnalyticsHandler) GetInsights(c *gin.Context) {
+	userID, err := getUserIDFromCtx(c)
+	if err != nil {
+		response.JSON(c, http.StatusUnauthorized, err.Error(), nil)
+		return
+	}
+
+	insights, err := h.analyticsUseCase.GetInsights(userID)
+	if err != nil {
+		response.JSON(c, http.StatusInternalServerError, "Failed to fetch AI insights", nil)
+		return
+	}
+
+	response.JSON(c, http.StatusOK, "AI insights fetched successfully", insights)
+}

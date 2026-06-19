@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { 
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, 
-  XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area 
+import {
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area
 } from "recharts";
-import { 
-  TrendingUp, TrendingDown, BookOpen, Clock, Eye, 
-  Sparkles, AlertCircle, Award, Compass, MessageSquare 
+import {
+  TrendingUp, TrendingDown, BookOpen, Clock, Eye,
+  Sparkles, AlertCircle, Award, Compass, MessageSquare
 } from "lucide-react";
 import api from "@/lib/api/axios";
 
@@ -145,7 +145,7 @@ export function WriterDashboard() {
           <AlertCircle className="w-10 h-10 text-destructive mx-auto mb-3" />
           <h3 className="font-bold text-lg text-foreground mb-1">Error Loading Analytics</h3>
           <p className="text-sm text-muted-foreground mb-4">{error}</p>
-          <button 
+          <button
             onClick={fetchStats}
             className="px-4 py-2 bg-violet-600 text-white rounded-full text-sm font-semibold hover:bg-violet-700 transition-colors shadow-sm"
           >
@@ -166,7 +166,7 @@ export function WriterDashboard() {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Timeframe:</span>
-          <select 
+          <select
             value={timeFilter}
             onChange={(e) => setTimeFilter(e.target.value as any)}
             className="bg-secondary/50 border border-border px-3 py-1.5 rounded-full text-sm outline-none font-medium cursor-pointer focus:border-violet-500 transition-all"
@@ -199,16 +199,16 @@ export function WriterDashboard() {
           <div className="h-12 w-full mt-2">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={activeStats.viewTrends}>
-                <Line 
-                  type="monotone" 
-                  dataKey="views" 
-                  stroke="#6366f1" 
-                  strokeWidth={2} 
-                  dot={false} 
+                <Line
+                  type="monotone"
+                  dataKey="views"
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  dot={false}
                 />
-                <Tooltip 
-                  contentStyle={{ display: "none" }} 
-                  cursor={{ stroke: "#a855f7", strokeWidth: 1, strokeDasharray: "3 3" }} 
+                <Tooltip
+                  contentStyle={{ display: "none" }}
+                  cursor={{ stroke: "#a855f7", strokeWidth: 1, strokeDasharray: "3 3" }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -237,7 +237,7 @@ export function WriterDashboard() {
             </span>
           </div>
           <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden mt-2">
-            <div 
+            <div
               className="bg-fuchsia-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${(activeStats.totalReads / activeStats.totalViews) * 100}%` }}
             />
@@ -281,19 +281,19 @@ export function WriterDashboard() {
               <AreaChart data={activeStats.timeDistribution}>
                 <defs>
                   <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="hour" fontSize={10} stroke="var(--muted-foreground)" />
                 <YAxis fontSize={10} stroke="var(--muted-foreground)" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: "var(--background)", 
-                    borderColor: "var(--border)", 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "var(--background)",
+                    borderColor: "var(--border)",
                     borderRadius: "0.75rem",
                     fontSize: "12px"
-                  }} 
+                  }}
                 />
                 <Area type="monotone" dataKey="activeReaders" stroke="#6366f1" strokeWidth={2} fillOpacity={1} fill="url(#colorActive)" />
               </AreaChart>
@@ -322,13 +322,13 @@ export function WriterDashboard() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: "var(--background)", 
-                    borderColor: "var(--border)", 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "var(--background)",
+                    borderColor: "var(--border)",
                     borderRadius: "0.5rem",
                     fontSize: "11px"
-                  }} 
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -359,13 +359,13 @@ export function WriterDashboard() {
               <BarChart data={activeStats.tagPerformance} layout="vertical">
                 <XAxis type="number" fontSize={10} hide />
                 <YAxis dataKey="tag" type="category" fontSize={10} stroke="var(--muted-foreground)" width={70} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: "var(--background)", 
-                    borderColor: "var(--border)", 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "var(--background)",
+                    borderColor: "var(--border)",
                     borderRadius: "0.5rem",
                     fontSize: "11px"
-                  }} 
+                  }}
                 />
                 <Bar dataKey="views" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12}>
                   {activeStats.tagPerformance.map((entry, index) => (
@@ -388,9 +388,9 @@ export function WriterDashboard() {
               <span className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 animate-pulse text-violet-500" /> AI Insights Recommendations
               </span>
-              <span className="text-[10px] bg-violet-500/10 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full font-bold">
+              {/* <span className="text-[10px] bg-violet-500/10 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full font-bold">
                 Powered by Gemini
-              </span>
+              </span> */}
             </div>
 
             <div className="flex flex-col gap-3">
@@ -474,8 +474,8 @@ export function WriterDashboard() {
                         </span>
                         {/* Miniature completion track bar */}
                         <div className="w-12 bg-secondary h-1.5 rounded-full overflow-hidden hidden sm:block">
-                          <div 
-                            className="bg-violet-500 h-full rounded-full" 
+                          <div
+                            className="bg-violet-500 h-full rounded-full"
                             style={{ width: `${article.readThroughRate}%` }}
                           />
                         </div>

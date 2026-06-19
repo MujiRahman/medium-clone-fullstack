@@ -46,7 +46,19 @@ func TestStoryUseCase_CreateDraft_Success(t *testing.T) {
 	}
 
 	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO "stories"`)).
-		WithArgs(sqlmock.AnyArg(), authorID, req.Title, sqlmock.AnyArg(), req.Content, domain.StoryStatusDraft, sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WithArgs(
+			sqlmock.AnyArg(),        // id
+			authorID,                // author_id
+			req.Title,               // title
+			sqlmock.AnyArg(),        // slug
+			req.Content,             // content
+			"",                      // tldr
+			"",                      // tags
+			domain.StoryStatusDraft, // status
+			nil,                     // published_at
+			sqlmock.AnyArg(),        // created_at
+			sqlmock.AnyArg(),        // updated_at
+		).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	story, err := uc.CreateDraft(authorID, req)
@@ -150,5 +162,58 @@ func TestStoryUseCase_AddClap_ExceedMax(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, clap)
 	assert.Equal(t, usecase.ErrMaxClapsExceed, err)
+	assert.Nil(t, mock.ExpectationsWereMet())
+}
+
+func TestStoryUseCase_GetStoryByID_Success(t *testing.T) {
+	uc, mock := setupStoryMockTest(t)
+
+	authorID := uuid.New()
+	storyID := uuid.New()
+
+	rows := sqlmock.NewRows([]string{"id", "author_id", "title"}).
+		AddRow(storyID, authorID, "Judul Cerita")
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "stories" WHERE id = $1 ORDER BY "stories"."id" LIMIT $2`)).
+		WithArgs(storyID, 1).
+		WillReturnRows(rows)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "users" WHERE "users"."id" = $1`)).
+		WithArgs(authorID).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(authorID))
+
+	story, err := uc.GetStoryByID(authorID, storyID)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, story)
+	assert.Equal(t, storyID, story.ID)
+	assert.Equal(t, authorID, story.AuthorID)
+	assert.Nil(t, mock.ExpectationsWereMet())
+}
+
+func TestStoryUseCase_DeleteStory_Success(t *testing.T) {
+	uc, mock := setupStoryMockTest(t)
+
+	authorID := uuid.New()
+	storyID := uuid.New()
+
+	rows := sqlmock.NewRows([]string{"id", "author_id", "title"}).
+		AddRow(storyID, authorID, "Judul Cerita")
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "stories" WHERE id = $1 ORDER BY "stories"."id" LIMIT $2`)).
+		WithArgs(storyID, 1).
+		WillReturnRows(rows)
+
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM "users" WHERE "users"."id" = $1`)).
+		WithArgs(authorID).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(authorID))
+
+	mock.ExpectExec(regexp.QuoteMeta(`DELETE FROM "stories" WHERE id = $1`)).
+		WithArgs(storyID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err := uc.DeleteStory(authorID, storyID)
+
+	assert.NoError(t, err)
 	assert.Nil(t, mock.ExpectationsWereMet())
 }
