@@ -14,6 +14,7 @@ type StoryRepository interface {
 	GetByID(id uuid.UUID) (*domain.Story, error)
 	GetBySlug(slug string) (*domain.Story, error)
 	GetPublishedStories() ([]*domain.Story, error)
+	GetStoriesByAuthor(authorID uuid.UUID) ([]*domain.Story, error)
 	UpdateStory(story *domain.Story) error
 	DeleteStory(id uuid.UUID) error
 }
@@ -70,6 +71,15 @@ func (r *storyRepository) GetPublishedStories() ([]*domain.Story, error) {
 	err := r.db.Preload("Author").
 		Select("stories.*, COALESCE((SELECT SUM(count) FROM claps WHERE claps.story_id = stories.id), 0) AS total_claps").
 		Where("status = ?", domain.StoryStatusPublished).Order("published_at DESC").Find(&stories).Error
+	return stories, err
+}
+
+func (r *storyRepository) GetStoriesByAuthor(authorID uuid.UUID) ([]*domain.Story, error) {
+	var stories []*domain.Story
+	err := r.db.Preload("Author").
+		Select("stories.*, COALESCE((SELECT SUM(count) FROM claps WHERE claps.story_id = stories.id), 0) AS total_claps").
+		Where("author_id = ? AND status = ?", authorID, domain.StoryStatusPublished).
+		Order("published_at DESC").Find(&stories).Error
 	return stories, err
 }
 

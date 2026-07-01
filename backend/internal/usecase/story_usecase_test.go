@@ -10,12 +10,15 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	gormpostgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+
 
 func setupStoryMockTest(t *testing.T) (usecase.StoryUseCase, sqlmock.Sqlmock) {
 	db, mock, err := sqlmock.New()
@@ -31,7 +34,8 @@ func setupStoryMockTest(t *testing.T) (usecase.StoryUseCase, sqlmock.Sqlmock) {
 
 	storyRepo := postgres.NewStoryRepository(gdb)
 	clapRepo := postgres.NewClapRepository(gdb)
-	storyUsecase := usecase.NewStoryUseCase(storyRepo, clapRepo)
+	rdb := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+	storyUsecase := usecase.NewStoryUseCase(storyRepo, clapRepo, rdb, new(DummyNotificationUseCase))
 
 	return storyUsecase, mock
 }

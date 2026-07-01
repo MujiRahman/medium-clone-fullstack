@@ -22,10 +22,14 @@ test.describe('Authentication and API Stability', () => {
     // 5. Submit form
     await page.click('button:has-text("Sign In")');
 
-    // 6. Verify that we don't get a silent ECONNREFUSED crash causing page freeze.
-    // If it fails with "Email belum terdaftar" or similar API message, it means the backend IS healthily connected!
-    // We expect either navigation home OR a backend-specific error on the UI.
-    const hasError = await page.locator('.text-red-600').isVisible({ timeout: 4000 }).catch(() => false);
+    // 6. Wait for API response before checking visibility
+    try {
+      await page.waitForResponse(response => response.url().includes('/auth/login'), { timeout: 5000 });
+    } catch (e) {
+      // Ignore if it navigated away immediately
+    }
+
+    const hasError = await page.locator('.text-red-600').isVisible();
     
     // If there is an error, we assert the backend is responding (meaning no ECONNREFUSED)
     if (hasError) {

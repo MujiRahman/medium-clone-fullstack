@@ -42,9 +42,10 @@ type StoryUseCase interface {
 }
 
 type storyUseCase struct {
-	storyRepo postgres.StoryRepository
-	clapRepo  postgres.ClapRepository
-	rdb       *redis.Client
+	storyRepo    postgres.StoryRepository
+	clapRepo     postgres.ClapRepository
+	rdb          *redis.Client
+	notifUseCase NotificationUseCase
 }
 
 var (
@@ -53,11 +54,17 @@ var (
 	ErrMaxClapsExceed = errors.New("maximum 50 claps exceeded for this story")
 )
 
-func NewStoryUseCase(storyRepo postgres.StoryRepository, clapRepo postgres.ClapRepository, rdb *redis.Client) StoryUseCase {
+func NewStoryUseCase(
+	storyRepo postgres.StoryRepository,
+	clapRepo postgres.ClapRepository,
+	rdb *redis.Client,
+	notifUseCase NotificationUseCase,
+) StoryUseCase {
 	return &storyUseCase{
-		storyRepo: storyRepo,
-		clapRepo:  clapRepo,
-		rdb:       rdb,
+		storyRepo:    storyRepo,
+		clapRepo:     clapRepo,
+		rdb:          rdb,
+		notifUseCase: notifUseCase,
 	}
 }
 
@@ -186,6 +193,13 @@ func (u *storyUseCase) AddClap(userID uuid.UUID, storyID uuid.UUID, req AddClapR
 	// Save
 	if err := u.clapRepo.SaveClap(clap); err != nil {
 		return nil, err
+	}
+
+	// Trigger clap notification to the author
+	if story.AuthorID != userID {
+		go func() {
+			_, _ = u.notifUseCase.CreateNotification(context.Background(), story.AuthorID, userID, domain.NotificationTypeClap, "", story.Slug)
+		}()
 	}
 
 	return clap, nil

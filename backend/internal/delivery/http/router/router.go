@@ -20,6 +20,9 @@ func SetupRouter(
 	commentHandler *handler.CommentHandler,
 	aiHandler *handler.AIHandler,
 	analyticsHandler *handler.AnalyticsHandler,
+	followHandler *handler.FollowHandler,
+	notificationHandler *handler.NotificationHandler,
+	searchHandler *handler.SearchHandler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -59,6 +62,12 @@ func SetupRouter(
 		api.GET("/stories/:slug/comments", commentHandler.GetStoryComments)
 		api.POST("/analytics/track", analyticsHandler.Track)
 
+		// Search Routes
+		api.GET("/search/autocomplete", searchHandler.Autocomplete)
+
+		// Public Follow Stats
+		api.GET("/users/:username/follow-stats", followHandler.GetFollowStats)
+
 		// Protected Routes
 		protected := api.Group("/")
 		protected.Use(middleware.JWTMiddleware())
@@ -75,6 +84,9 @@ func SetupRouter(
 			{
 				users.GET("/:username", userHandler.GetProfile)
 				users.PUT("/:username", userHandler.UpdateProfile)
+				users.POST("/:username/follow", followHandler.Follow)
+				users.POST("/:username/unfollow", followHandler.Unfollow)
+				users.GET("/:username/follow-status", followHandler.IsFollowing)
 			}
 
 			// Stories Routes
@@ -86,6 +98,15 @@ func SetupRouter(
 				stories.DELETE("/:id", storyHandler.DeleteStory)
 				stories.POST("/:id/clap", storyHandler.ClapStory)
 				stories.POST("/:id/comments", commentHandler.CreateComment)
+			}
+
+			// Notifications Routes
+			notifications := protected.Group("/notifications")
+			{
+				notifications.GET("", notificationHandler.GetNotifications)
+				notifications.POST("/read-all", notificationHandler.MarkAllAsRead)
+				notifications.POST("/:id/read", notificationHandler.MarkAsRead)
+				notifications.GET("/stream", notificationHandler.StreamNotifications)
 			}
 
 			// AI Routes

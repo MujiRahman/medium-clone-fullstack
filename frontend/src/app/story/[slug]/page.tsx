@@ -6,6 +6,7 @@ import { ClapButton } from '@/components/ClapButton';
 import { ThreadedComments } from "@/components/ThreadedComments";
 import { AudioReader } from '@/components/AudioReader';
 import { AnalyticsTracker } from '@/components/AnalyticsTracker';
+import { FollowButton } from '@/components/FollowButton';
 
 interface Story {
   id: string;
@@ -130,12 +131,19 @@ export default async function StoryPage({ params }: PageProps) {
           </h1>
           <div className="flex items-center gap-4 mb-6">
             {/* Avatar Placeholder */}
-            <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground">
-              {story.author.username.charAt(0).toUpperCase()}
-            </div>
+            <Link href={`/[username]`} as={`/${story.author.username}`}>
+              <div className="h-12 w-12 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center justify-center font-bold text-muted-foreground cursor-pointer">
+                {story.author.username.charAt(0).toUpperCase()}
+              </div>
+            </Link>
             <div className="flex flex-col">
-              <span className="font-medium">{story.author.username}</span>
-              <span className="text-sm text-muted-foreground">
+              <div className="flex items-center gap-3">
+                <Link href={`/[username]`} as={`/${story.author.username}`} className="font-semibold text-foreground hover:underline">
+                  {story.author.username}
+                </Link>
+                <FollowButton username={story.author.username} />
+              </div>
+              <span className="text-sm text-muted-foreground mt-0.5">
                 {readingTime} min read · {publishDate}
               </span>
             </div>
