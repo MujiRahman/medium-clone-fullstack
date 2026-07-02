@@ -14,6 +14,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*domain.User, error)
 	GetByUsername(username string) (*domain.User, error)
 	GetByID(id uuid.UUID) (*domain.User, error)
+	UpdateUser(user *domain.User) error
 }
 
 type userRepository struct {
@@ -26,6 +27,10 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (r *userRepository) CreateUser(user *domain.User) error {
 	return r.db.Create(user).Error
+}
+
+func (r *userRepository) UpdateUser(user *domain.User) error {
+	return r.db.Save(user).Error
 }
 
 func (r *userRepository) GetByEmail(email string) (*domain.User, error) {

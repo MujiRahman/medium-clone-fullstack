@@ -3,12 +3,15 @@ package usecase
 import (
 	"errors"
 	"time"
+	"context"
+	"fmt"
 
 	"medium-clone/internal/domain"
 	"medium-clone/internal/repository/postgres"
 	"medium-clone/pkg/utils"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 )
 
 type CreateStoryReq struct {
@@ -20,6 +23,8 @@ type UpdateStoryReq struct {
 	Title   string  `json:"title"`
 	Content string  `json:"content"`
 	Status  *string `json:"status"` // Optional field, if changing to published
+	TLDR    string  `json:"tldr"`
+	Tags    string  `json:"tags"`
 }
 
 type AddClapReq struct {
@@ -32,11 +37,15 @@ type StoryUseCase interface {
 	GetPublishedStoryBySlug(slug string) (*domain.Story, error)
 	GetPublishedStories() ([]*domain.Story, error)
 	AddClap(userID uuid.UUID, storyID uuid.UUID, req AddClapReq) (*domain.Clap, error)
+	GetStoryByID(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error)
+	DeleteStory(reqUserID uuid.UUID, storyID uuid.UUID) error
 }
 
 type storyUseCase struct {
-	storyRepo postgres.StoryRepository
-	clapRepo  postgres.ClapRepository
+	storyRepo    postgres.StoryRepository
+	clapRepo     postgres.ClapRepository
+	rdb          *redis.Client
+	notifUseCase NotificationUseCase
 }
 
 var (
@@ -45,10 +54,17 @@ var (
 	ErrMaxClapsExceed = errors.New("maximum 50 claps exceeded for this story")
 )
 
-func NewStoryUseCase(storyRepo postgres.StoryRepository, clapRepo postgres.ClapRepository) StoryUseCase {
+func NewStoryUseCase(
+	storyRepo postgres.StoryRepository,
+	clapRepo postgres.ClapRepository,
+	rdb *redis.Client,
+	notifUseCase NotificationUseCase,
+) StoryUseCase {
 	return &storyUseCase{
-		storyRepo: storyRepo,
-		clapRepo:  clapRepo,
+		storyRepo:    storyRepo,
+		clapRepo:     clapRepo,
+		rdb:          rdb,
+		notifUseCase: notifUseCase,
 	}
 }
 
@@ -64,6 +80,11 @@ func (u *storyUseCase) CreateDraft(authorID uuid.UUID, req CreateStoryReq) (*dom
 	if err := u.storyRepo.CreateStory(story); err != nil {
 		return nil, err
 	}
+
+	// Invalidate insights cache
+	ctx := context.Background()
+	u.rdb.Del(ctx, fmt.Sprintf("insights:%s", authorID.String()))
+
 	return story, nil
 }
 
@@ -89,6 +110,12 @@ func (u *storyUseCase) UpdateStory(reqUserID uuid.UUID, storyID uuid.UUID, req U
 	if req.Content != "" {
 		story.Content = req.Content
 	}
+	if req.TLDR != "" {
+		story.TLDR = req.TLDR
+	}
+	if req.Tags != "" {
+		story.Tags = req.Tags
+	}
 
 	if req.Status != nil {
 		status := domain.StoryStatus(*req.Status)
@@ -103,6 +130,10 @@ func (u *storyUseCase) UpdateStory(reqUserID uuid.UUID, storyID uuid.UUID, req U
 	if err := u.storyRepo.UpdateStory(story); err != nil {
 		return nil, err
 	}
+
+	// Invalidate insights cache
+	ctx := context.Background()
+	u.rdb.Del(ctx, fmt.Sprintf("insights:%s", reqUserID.String()))
 
 	return story, nil
 }
@@ -164,5 +195,41 @@ func (u *storyUseCase) AddClap(userID uuid.UUID, storyID uuid.UUID, req AddClapR
 		return nil, err
 	}
 
+	// Trigger clap notification to the author
+	if story.AuthorID != userID {
+		go func() {
+			_, _ = u.notifUseCase.CreateNotification(context.Background(), story.AuthorID, userID, domain.NotificationTypeClap, "", story.Slug)
+		}()
+	}
+
 	return clap, nil
+}
+
+func (u *storyUseCase) GetStoryByID(reqUserID uuid.UUID, storyID uuid.UUID) (*domain.Story, error) {
+	story, err := u.storyRepo.GetByID(storyID)
+	if err != nil {
+		return nil, err
+	}
+	if story == nil {
+		return nil, ErrStoryNotFound
+	}
+	// Validate authorization
+	if story.AuthorID != reqUserID {
+		return nil, ErrForbidden
+	}
+	return story, nil
+}
+
+func (u *storyUseCase) DeleteStory(reqUserID uuid.UUID, storyID uuid.UUID) error {
+	story, err := u.storyRepo.GetByID(storyID)
+	if err != nil {
+		return err
+	}
+	if story == nil {
+		return ErrStoryNotFound
+	}
+	if story.AuthorID != reqUserID {
+		return ErrForbidden
+	}
+	return u.storyRepo.DeleteStory(storyID)
 }

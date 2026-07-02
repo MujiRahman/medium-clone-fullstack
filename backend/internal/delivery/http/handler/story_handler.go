@@ -156,3 +156,66 @@ func (h *StoryHandler) ClapStory(c *gin.Context) {
 
 	response.JSON(c, http.StatusOK, "Clap added successfully", clap)
 }
+
+func (h *StoryHandler) GetStoryByID(c *gin.Context) {
+	userID, err := getUserIDFromCtx(c)
+	if err != nil {
+		response.JSON(c, http.StatusUnauthorized, "Unauthorized", nil)
+		return
+	}
+
+	storyIDStr := c.Param("id")
+	storyID, err := uuid.Parse(storyIDStr)
+	if err != nil {
+		response.JSON(c, http.StatusBadRequest, "Invalid story ID", nil)
+		return
+	}
+
+	story, err := h.storyUseCase.GetStoryByID(userID, storyID)
+	if err != nil {
+		if errors.Is(err, usecase.ErrForbidden) {
+			response.JSON(c, http.StatusForbidden, err.Error(), nil)
+			return
+		}
+		if errors.Is(err, usecase.ErrStoryNotFound) {
+			response.JSON(c, http.StatusNotFound, err.Error(), nil)
+			return
+		}
+		response.JSON(c, http.StatusInternalServerError, "Failed to get story", nil)
+		return
+	}
+
+	response.JSON(c, http.StatusOK, "Success", story)
+}
+
+func (h *StoryHandler) DeleteStory(c *gin.Context) {
+	userID, err := getUserIDFromCtx(c)
+	if err != nil {
+		response.JSON(c, http.StatusUnauthorized, "Unauthorized", nil)
+		return
+	}
+
+	storyIDStr := c.Param("id")
+	storyID, err := uuid.Parse(storyIDStr)
+	if err != nil {
+		response.JSON(c, http.StatusBadRequest, "Invalid story ID", nil)
+		return
+	}
+
+	err = h.storyUseCase.DeleteStory(userID, storyID)
+	if err != nil {
+		if errors.Is(err, usecase.ErrForbidden) {
+			response.JSON(c, http.StatusForbidden, err.Error(), nil)
+			return
+		}
+		if errors.Is(err, usecase.ErrStoryNotFound) {
+			response.JSON(c, http.StatusNotFound, err.Error(), nil)
+			return
+		}
+		response.JSON(c, http.StatusInternalServerError, "Failed to delete story", nil)
+		return
+	}
+
+	response.JSON(c, http.StatusOK, "Story deleted successfully", nil)
+}
+

@@ -1,8 +1,10 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"medium-clone/internal/domain"
+	"medium-clone/internal/repository/postgres"
 
 	"github.com/google/uuid"
 )
@@ -14,11 +16,21 @@ type CommentRepository interface {
 }
 
 type CommentUseCase struct {
-	commentRepo CommentRepository
+	commentRepo  CommentRepository
+	storyRepo    postgres.StoryRepository
+	notifUseCase NotificationUseCase
 }
 
-func NewCommentUseCase(commentRepo CommentRepository) *CommentUseCase {
-	return &CommentUseCase{commentRepo: commentRepo}
+func NewCommentUseCase(
+	commentRepo CommentRepository,
+	storyRepo postgres.StoryRepository,
+	notifUseCase NotificationUseCase,
+) *CommentUseCase {
+	return &CommentUseCase{
+		commentRepo:  commentRepo,
+		storyRepo:    storyRepo,
+		notifUseCase: notifUseCase,
+	}
 }
 
 func (u *CommentUseCase) CreateComment(storyID, userID uuid.UUID, req domain.CreateCommentRequest) (*domain.Comment, error) {
@@ -42,6 +54,16 @@ func (u *CommentUseCase) CreateComment(storyID, userID uuid.UUID, req domain.Cre
 
 	if err := u.commentRepo.Create(comment); err != nil {
 		return nil, err
+	}
+
+	// Trigger comment notification to the story author
+	story, err := u.storyRepo.GetByID(storyID)
+	if err == nil && story != nil {
+		if story.AuthorID != userID {
+			go func() {
+				_, _ = u.notifUseCase.CreateNotification(context.Background(), story.AuthorID, userID, domain.NotificationTypeComment, "", story.Slug)
+			}()
+		}
 	}
 
 	return comment, nil

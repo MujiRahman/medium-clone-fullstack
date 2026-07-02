@@ -18,6 +18,11 @@ func SetupRouter(
 	userHandler *handler.UserHandler,
 	storyHandler *handler.StoryHandler,
 	commentHandler *handler.CommentHandler,
+	aiHandler *handler.AIHandler,
+	analyticsHandler *handler.AnalyticsHandler,
+	followHandler *handler.FollowHandler,
+	notificationHandler *handler.NotificationHandler,
+	searchHandler *handler.SearchHandler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -55,6 +60,13 @@ func SetupRouter(
 		api.GET("/stories/:slug", storyHandler.GetStoryBySlug)
 		api.GET("/stories", storyHandler.GetStories)
 		api.GET("/stories/:slug/comments", commentHandler.GetStoryComments)
+		api.POST("/analytics/track", analyticsHandler.Track)
+
+		// Search Routes
+		api.GET("/search/autocomplete", searchHandler.Autocomplete)
+
+		// Public Follow Stats
+		api.GET("/users/:username/follow-stats", followHandler.GetFollowStats)
 
 		// Protected Routes
 		protected := api.Group("/")
@@ -63,20 +75,44 @@ func SetupRouter(
 			// Auth
 			protected.GET("/auth/me", authHandler.GetMe)
 
+			// Analytics Stats
+			protected.GET("/me/stats", analyticsHandler.GetStats)
+			protected.GET("/me/stats/insights", analyticsHandler.GetInsights)
+
 			// Users Routes
 			users := protected.Group("/users")
 			{
 				users.GET("/:username", userHandler.GetProfile)
 				users.PUT("/:username", userHandler.UpdateProfile)
+				users.POST("/:username/follow", followHandler.Follow)
+				users.POST("/:username/unfollow", followHandler.Unfollow)
+				users.GET("/:username/follow-status", followHandler.IsFollowing)
 			}
 
 			// Stories Routes
 			stories := protected.Group("/stories")
 			{
 				stories.POST("", storyHandler.CreateStory)
+				stories.GET("/id/:id", storyHandler.GetStoryByID)
 				stories.PUT("/:id", storyHandler.UpdateStory)
+				stories.DELETE("/:id", storyHandler.DeleteStory)
 				stories.POST("/:id/clap", storyHandler.ClapStory)
 				stories.POST("/:id/comments", commentHandler.CreateComment)
+			}
+
+			// Notifications Routes
+			notifications := protected.Group("/notifications")
+			{
+				notifications.GET("", notificationHandler.GetNotifications)
+				notifications.POST("/read-all", notificationHandler.MarkAllAsRead)
+				notifications.POST("/:id/read", notificationHandler.MarkAsRead)
+				notifications.GET("/stream", notificationHandler.StreamNotifications)
+			}
+
+			// AI Routes
+			ai := protected.Group("/ai")
+			{
+				ai.POST("/generate", aiHandler.Generate)
 			}
 		}
 	}

@@ -14,6 +14,8 @@ interface Story {
   author: {
     username: string;
   };
+  tldr?: string;
+  tags?: string;
 }
 
 interface ApiResponse {
@@ -78,14 +80,24 @@ export default async function Home() {
                     <time dateTime={story.published_at}>{publishDate}</time>
                   </div>
 
-                  <Link href={`/story/${story.slug}`} className="cursor-pointer">
+                  <Link href={`/story/[slug]`} as={`/story/${story.slug}`} className="cursor-pointer">
                     <h2 className="font-sans text-2xl font-bold font-extrabold group-hover:underline">
                       {story.title}
                     </h2>
                     <p className="mt-2 font-serif text-muted-foreground line-clamp-3">
-                      {excerpt}
+                      {story.tldr || excerpt}
                     </p>
                   </Link>
+
+                  {story.tags && (
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {story.tags.split(",").map((t) => t.trim()).filter((t) => t.length > 0).map((tag, idx) => (
+                        <span key={idx} className="text-[10px] font-semibold bg-muted dark:bg-zinc-800 text-muted-foreground px-2 py-0.5 rounded-full border border-border/40">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
                     <span>{readingTime} min read</span>

@@ -41,9 +41,23 @@ func InitDatabase() *gorm.DB {
 		&domain.Story{},
 		&domain.Clap{},
 		&domain.Comment{},
+		&domain.ArticleAnalytics{},
+		&domain.Follow{},
+		&domain.Notification{},
 	)
 	if err != nil {
 		log.Fatal("Failed to auto migrate database:", err)
+	}
+
+	// Enable pg_trgm and add fuzzy search indexes
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm;").Error; err != nil {
+		log.Printf("Warning: failed to create pg_trgm extension: %v", err)
+	}
+	if err := db.Exec("CREATE INDEX IF NOT EXISTS idx_users_username_trgm ON users USING gin (username gin_trgm_ops);").Error; err != nil {
+		log.Printf("Warning: failed to create trigram index on users: %v", err)
+	}
+	if err := db.Exec("CREATE INDEX IF NOT EXISTS idx_stories_title_trgm ON stories USING gin (title gin_trgm_ops);").Error; err != nil {
+		log.Printf("Warning: failed to create trigram index on stories: %v", err)
 	}
 
 	log.Println("Database connection established and migrated")

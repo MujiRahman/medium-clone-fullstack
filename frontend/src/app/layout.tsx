@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: "Enterprise Grade Medium Clone",
 };
 
+import { ToastContainer } from "@/components/ToastContainer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,6 +32,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             {children}
+            <ToastContainer />
           </AuthProvider>
         </ThemeProvider>
       </body>

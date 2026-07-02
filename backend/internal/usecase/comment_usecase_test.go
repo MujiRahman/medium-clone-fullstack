@@ -1,12 +1,14 @@
 package usecase_test
 
 import (
+	"context"
 	"medium-clone/internal/domain"
 	"medium-clone/internal/usecase"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -33,9 +35,27 @@ func (m *MockCommentRepository) GetByStoryID(storyID uuid.UUID) ([]domain.Commen
 	return args.Get(0).([]domain.Comment), args.Error(1)
 }
 
+type DummyNotificationUseCase struct{}
+
+func (d *DummyNotificationUseCase) CreateNotification(ctx context.Context, recipientID, senderID uuid.UUID, notifType domain.NotificationType, message, storySlug string) (*domain.Notification, error) {
+	return nil, nil
+}
+func (d *DummyNotificationUseCase) GetNotifications(recipientID uuid.UUID) ([]domain.Notification, error) {
+	return nil, nil
+}
+func (d *DummyNotificationUseCase) MarkAsRead(id, recipientID uuid.UUID) error {
+	return nil
+}
+func (d *DummyNotificationUseCase) MarkAllAsRead(recipientID uuid.UUID) error {
+	return nil
+}
+func (d *DummyNotificationUseCase) Subscribe(ctx context.Context, recipientID uuid.UUID) *redis.PubSub {
+	return nil
+}
+
 func TestCommentUseCase_GetStoryCommentsTree(t *testing.T) {
 	mockRepo := new(MockCommentRepository)
-	uc := usecase.NewCommentUseCase(mockRepo)
+	uc := usecase.NewCommentUseCase(mockRepo, nil, new(DummyNotificationUseCase))
 
 	storyID := uuid.New()
 	userID := uuid.New()

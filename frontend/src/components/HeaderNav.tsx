@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "./ui/Button";
 import { useEffect, useState } from "react";
+import { SearchAutocomplete } from "./SearchAutocomplete";
+import { NotificationBell } from "./NotificationBell";
 
 export function HeaderNav() {
   const { isAuthenticated, logout, user } = useAuthStore();
@@ -25,16 +27,21 @@ export function HeaderNav() {
 
   return (
     <div className="flex items-center gap-4">
+      <SearchAutocomplete />
       <ThemeToggle />
       {isAuthenticated ? (
         <>
-          <span className="text-sm text-muted-foreground mr-2 hidden sm:inline-block">
+          <NotificationBell />
+          <span className="text-sm text-muted-foreground hidden md:inline-block">
             Hi, {user?.username}
           </span>
+          <Link href="/me/stats" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline-block">
+            Stats
+          </Link>
           <Link href="/new-story">
             <Button className="rounded-full bg-green-600 hover:bg-green-700 text-white">Write</Button>
           </Link>
-          <Button variant="ghost" onClick={() => logout()}>
+          <Button variant="ghost" onClick={() => logout()} className="text-sm">
             Logout
           </Button>
         </>
