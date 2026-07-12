@@ -407,3 +407,1857 @@ error: Your local changes to the following files would be overwritten by merge:
 Please commit your changes or stash them before you merge.
 Aborting
 Updating c5847f3..620619c
+2026-07-03 00:00:01 - Starting auto pull and rebuild process...
+2026-07-03 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-03 00:00:05 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-03 00:00:05 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-03 00:00:05 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-03 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.20kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 828B done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 321B done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 ...
+
+#5 [backend internal] load metadata for docker.io/library/alpine:latest
+#5 DONE 1.6s
+
+#6 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#6 DONE 1.7s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 DONE 1.8s
+
+#9 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#9 DONE 0.1s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648 0.1s done
+#12 DONE 0.1s
+
+#13 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#13 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#13 DONE 0.1s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB 0.0s done
+#11 DONE 0.0s
+
+#14 [backend builder 5/6] COPY . .
+#14 CACHED
+
+#15 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#15 CACHED
+
+#16 [backend stage-1 2/3] WORKDIR /root/
+#16 CACHED
+
+#17 [backend builder 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#18 [backend builder 4/6] RUN go mod download
+#18 CACHED
+
+#19 [backend builder 2/6] WORKDIR /app
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#8 [frontend internal] load build context
+#8 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:70c172960a2acdd5f897783a5be0776b53df9c690d296e0f809eeeea46d9ac7f done
+#21 exporting config sha256:27a8fba7e457950d55869db9262c55c5d5dcf9fbe93ed198390e971e37269c99 done
+#21 exporting attestation manifest sha256:d12688dcf5453d62a3224f4ba6339085527e70a5beec76aae5a5fbc1c2419c36 0.0s done
+#21 exporting manifest list sha256:f809bbfc4c1336d0f1d8acc2954d59407c24ae1b5a18be48b137e295cd3e466a 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.1s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 transferring context: 4.49MB 1.9s done
+#8 DONE 1.9s
+
+#23 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#23 CACHED
+
+#24 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#24 CACHED
+
+#25 [frontend builder 3/4] COPY . .
+#25 CACHED
+
+#26 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#26 CACHED
+
+#27 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#27 CACHED
+
+#28 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#28 CACHED
+
+#29 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#29 CACHED
+
+#30 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#30 CACHED
+
+#31 [frontend deps 2/4] WORKDIR /app
+#31 CACHED
+
+#32 [frontend builder 1/4] WORKDIR /app
+#32 CACHED
+
+#33 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#33 CACHED
+
+#34 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:d09ead9861b1f588a0368fe1f5870bc713990ad1b29d5f743400bd971187641c done
+#36 exporting config sha256:5ef6b950c7e628e9a86af04b0399c61c0c0355bb389733f81b684c0bc1faaf23 done
+#36 exporting attestation manifest sha256:4a9ba144cde8f441b2152288e99cd3c4cce45a6ba0667738a45fb6637f405017 0.0s done
+#36 exporting manifest list sha256:2701b20e0267f2b29b29b17b5da6e9c750a726c27f2dc405a977e78212265f1e 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.1s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-03 00:00:14 - Services successfully rebuilt and restarted!
+2026-07-03 00:00:14 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-04 00:00:01 - Starting auto pull and rebuild process...
+2026-07-04 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-04 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-04 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-04 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-04 00:00:07 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.20kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 828B done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 321B done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 ...
+
+#5 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 1.6s
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [backend internal] load metadata for docker.io/library/alpine:latest
+#7 DONE 1.6s
+
+#8 [frontend internal] load build context
+#8 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 DONE 1.7s
+
+#9 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#9 DONE 0.1s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648 0.1s done
+#12 DONE 0.1s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#13 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#13 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#13 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB done
+#11 DONE 0.0s
+
+#14 [backend builder 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [backend builder 4/6] RUN go mod download
+#15 CACHED
+
+#16 [backend stage-1 2/3] WORKDIR /root/
+#16 CACHED
+
+#17 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#17 CACHED
+
+#18 [backend builder 3/6] COPY go.mod go.sum ./
+#18 CACHED
+
+#19 [backend builder 5/6] COPY . .
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#8 [frontend internal] load build context
+#8 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:70c172960a2acdd5f897783a5be0776b53df9c690d296e0f809eeeea46d9ac7f done
+#21 exporting config sha256:27a8fba7e457950d55869db9262c55c5d5dcf9fbe93ed198390e971e37269c99 done
+#21 exporting attestation manifest sha256:e14b0143b4a8637cfe6f00c289a80fd8c75b7158e49d779b9e28c29ba86079c2 0.0s done
+#21 exporting manifest list sha256:4e9d092854e0f153543f27c50aa9d8357b75bbb91add75f4c9ebc202d17f9cb1 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.2s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 transferring context: 4.49MB 1.8s done
+#8 DONE 1.9s
+
+#23 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#23 CACHED
+
+#24 [frontend builder 3/4] COPY . .
+#24 CACHED
+
+#25 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#25 CACHED
+
+#26 [frontend deps 2/4] WORKDIR /app
+#26 CACHED
+
+#27 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#27 CACHED
+
+#28 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#28 CACHED
+
+#29 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#29 CACHED
+
+#30 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#30 CACHED
+
+#31 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#31 CACHED
+
+#32 [frontend builder 1/4] WORKDIR /app
+#32 CACHED
+
+#33 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#33 CACHED
+
+#34 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:d09ead9861b1f588a0368fe1f5870bc713990ad1b29d5f743400bd971187641c done
+#36 exporting config sha256:5ef6b950c7e628e9a86af04b0399c61c0c0355bb389733f81b684c0bc1faaf23 done
+#36 exporting attestation manifest sha256:fc32bfb292bf5d6fca530cdb15d6de881546d1bb918301fec9eb975a803cb6be 0.0s done
+#36 exporting manifest list sha256:b8653f092a912a28981d8e40d775d5a3181a87c9655f6e53ead6a6d99d34f990 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.1s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-04 00:00:13 - Services successfully rebuilt and restarted!
+2026-07-04 00:00:13 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-05 00:00:01 - Starting auto pull and rebuild process...
+2026-07-05 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-05 00:00:05 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-05 00:00:05 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-05 00:00:05 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-05 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.20kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 ...
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 DONE 1.7s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.7s
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [backend internal] load metadata for docker.io/library/alpine:latest
+#7 DONE 1.8s
+
+#8 [frontend internal] load build context
+#8 DONE 0.0s
+
+#9 [backend internal] load .dockerignore
+#9 transferring context: 2B done
+#9 DONE 0.0s
+
+#10 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#10 DONE 0.1s
+
+#11 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#11 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#11 DONE 0.1s
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648 0.1s done
+#12 DONE 0.1s
+
+#13 [backend internal] load build context
+#13 transferring context: 7.05kB done
+#13 DONE 0.0s
+
+#14 [backend builder 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [backend builder 3/6] COPY go.mod go.sum ./
+#15 CACHED
+
+#16 [backend builder 4/6] RUN go mod download
+#16 CACHED
+
+#17 [backend builder 5/6] COPY . .
+#17 DONE 0.1s
+
+#8 [frontend internal] load build context
+#8 transferring context: 4.49MB 3.1s done
+#8 DONE 3.1s
+
+#18 [frontend builder 1/4] WORKDIR /app
+#18 CACHED
+
+#19 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#19 CACHED
+
+#20 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#20 CACHED
+
+#21 [frontend deps 2/4] WORKDIR /app
+#21 CACHED
+
+#22 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#22 CACHED
+
+#23 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#23 CACHED
+
+#24 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#24 CACHED
+
+#25 [frontend builder 3/4] COPY . .
+#25 CACHED
+
+#26 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#26 CACHED
+
+#27 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#27 CACHED
+
+#28 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#28 CACHED
+
+#29 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#29 CACHED
+
+#30 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#30 CACHED
+
+#31 [frontend] exporting to image
+#31 exporting layers done
+#31 exporting manifest sha256:d09ead9861b1f588a0368fe1f5870bc713990ad1b29d5f743400bd971187641c done
+#31 exporting config sha256:5ef6b950c7e628e9a86af04b0399c61c0c0355bb389733f81b684c0bc1faaf23 done
+#31 exporting attestation manifest sha256:62362bff13569e74ab59d837effd5e9e15ecd027f3b5cabdd79e76aa14768729 0.0s done
+#31 exporting manifest list sha256:21551dde0f3a6329578eb5282e58b2d1672c4c48e3af685d1d15c8c34d961aac 0.0s done
+#31 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#31 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#31 DONE 0.2s
+
+#32 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#32 ...
+
+#33 [frontend] resolving provenance for metadata file
+#33 DONE 0.0s
+
+#32 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#32 DONE 122.6s
+
+#34 [backend stage-1 2/3] WORKDIR /root/
+#34 CACHED
+
+#35 [backend stage-1 3/3] COPY --from=builder /api .
+#35 DONE 0.2s
+
+#36 [backend] exporting to image
+#36 exporting layers
+#36 exporting layers 4.1s done
+#36 exporting manifest sha256:f862f49e1436a35fd6ee8b62eeda40d4a5fca91f398e96a2590e30392d2e522f 0.0s done
+#36 exporting config sha256:3e0ac9a559ee50bf93963c0848c18896ea5389428b162c191c5c57e40f065a76 0.0s done
+#36 exporting attestation manifest sha256:a7dd988d13281a5841ae64cd701e7dce801cb8fbd7fe5097009c609231eaaf6d 0.1s done
+#36 exporting manifest list sha256:1354f26c903bbab2eb7fee4aba5691e124c5e9a5d41a3d43430679dd9f2b8588
+#36 exporting manifest list sha256:1354f26c903bbab2eb7fee4aba5691e124c5e9a5d41a3d43430679dd9f2b8588 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-backend:latest
+#36 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.9s done
+#36 DONE 5.1s
+
+#37 [backend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_db Running 
+ Container medium_redis Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-05 00:02:22 - Services successfully rebuilt and restarted!
+2026-07-05 00:02:22 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-06 00:00:01 - Starting auto pull and rebuild process...
+2026-07-06 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-06 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-06 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-06 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-06 00:00:07 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-frontend Building 
+ Image medium-clone-fullstack-backend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.20kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 828B done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 321B done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#4 DONE 1.7s
+
+#5 [backend internal] load metadata for docker.io/library/alpine:latest
+#5 ...
+
+#6 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#6 DONE 1.7s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#5 [backend internal] load metadata for docker.io/library/alpine:latest
+#5 DONE 1.8s
+
+#8 [backend internal] load .dockerignore
+#8 transferring context: 2B done
+#8 DONE 0.0s
+
+#9 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#9 DONE 0.1s
+
+#10 [backend internal] load build context
+#10 DONE 0.0s
+
+#11 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#11 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#11 DONE 0.1s
+
+#12 [frontend internal] load build context
+#12 ...
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648
+#13 resolve docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648 0.1s done
+#13 DONE 0.1s
+
+#10 [backend internal] load build context
+#10 transferring context: 3.58kB done
+#10 DONE 0.0s
+
+#14 [backend builder 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [backend builder 4/6] RUN go mod download
+#15 CACHED
+
+#16 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#16 CACHED
+
+#17 [backend builder 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#18 [backend builder 5/6] COPY . .
+#18 CACHED
+
+#19 [backend stage-1 2/3] WORKDIR /root/
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#12 [frontend internal] load build context
+#12 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:f862f49e1436a35fd6ee8b62eeda40d4a5fca91f398e96a2590e30392d2e522f done
+#21 exporting config sha256:3e0ac9a559ee50bf93963c0848c18896ea5389428b162c191c5c57e40f065a76 done
+#21 exporting attestation manifest sha256:8e54312245137d901b6abe02c44f3514eeb70bb4e9e990e165c3673d45529052 0.0s done
+#21 exporting manifest list sha256:f2758e9a98aa98cedf09ee7e10cd421ff486530b9844882e58108988416b7a6a 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.1s
+
+#12 [frontend internal] load build context
+#12 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#12 [frontend internal] load build context
+#12 transferring context: 4.49MB 2.0s done
+#12 DONE 2.0s
+
+#23 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#23 CACHED
+
+#24 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#24 CACHED
+
+#25 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#25 CACHED
+
+#26 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#26 CACHED
+
+#27 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#27 CACHED
+
+#28 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#28 CACHED
+
+#29 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#29 CACHED
+
+#30 [frontend deps 2/4] WORKDIR /app
+#30 CACHED
+
+#31 [frontend builder 3/4] COPY . .
+#31 CACHED
+
+#32 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#32 CACHED
+
+#33 [frontend builder 1/4] WORKDIR /app
+#33 CACHED
+
+#34 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:d09ead9861b1f588a0368fe1f5870bc713990ad1b29d5f743400bd971187641c done
+#36 exporting config sha256:5ef6b950c7e628e9a86af04b0399c61c0c0355bb389733f81b684c0bc1faaf23 done
+#36 exporting attestation manifest sha256:cd5fc0964c2cf633d8f1b545d62b9f8c032ec7ecc80873a48f8413ebba171437 0.0s done
+#36 exporting manifest list sha256:0a8137d869a0484410fa9ccd7add75b7e5f1b039c91803b226fd5681db96256b 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.1s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_db Running 
+ Container medium_redis Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-06 00:00:14 - Services successfully rebuilt and restarted!
+2026-07-06 00:00:14 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-07 00:00:01 - Starting auto pull and rebuild process...
+2026-07-07 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-07 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-07 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-07 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-07 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.20kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.7s
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 ...
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 DONE 0.0s
+
+#8 [backend internal] load metadata for docker.io/library/alpine:latest
+#8 DONE 1.8s
+
+#9 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#9 DONE 0.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 DONE 2.5s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:3ad57304ad93bbec8548a0437ad9e06a455660655d9af011d58b993f6f615648 0.1s done
+#12 DONE 0.1s
+
+#13 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#13 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#13 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB done
+#11 DONE 0.0s
+
+#14 [backend stage-1 2/3] WORKDIR /root/
+#14 CACHED
+
+#15 [backend builder 2/6] WORKDIR /app
+#15 CACHED
+
+#16 [backend builder 3/6] COPY go.mod go.sum ./
+#16 CACHED
+
+#17 [backend builder 4/6] RUN go mod download
+#17 CACHED
+
+#18 [backend builder 5/6] COPY . .
+#18 CACHED
+
+#19 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#7 [frontend internal] load build context
+#7 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:f862f49e1436a35fd6ee8b62eeda40d4a5fca91f398e96a2590e30392d2e522f done
+#21 exporting config sha256:3e0ac9a559ee50bf93963c0848c18896ea5389428b162c191c5c57e40f065a76 done
+#21 exporting attestation manifest sha256:77d2d72e4babf0c9d1f5eef93cfbcda307cdcd879206fd7c2bbbaba613bde254 0.0s done
+#21 exporting manifest list sha256:fd4f28cfebd0cdb8274199fe8ebd3aa9b2abe7f6c4ce3fab3cf5abd9c502885b 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 transferring context: 4.49MB 2.0s done
+#7 DONE 2.1s
+
+#23 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#23 CACHED
+
+#24 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#24 CACHED
+
+#25 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#25 CACHED
+
+#26 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#26 CACHED
+
+#27 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#27 CACHED
+
+#28 [frontend builder 1/4] WORKDIR /app
+#28 CACHED
+
+#29 [frontend deps 2/4] WORKDIR /app
+#29 CACHED
+
+#30 [frontend builder 3/4] COPY . .
+#30 CACHED
+
+#31 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#31 CACHED
+
+#32 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#32 CACHED
+
+#33 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#33 CACHED
+
+#34 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers 0.0s done
+#36 exporting manifest sha256:d09ead9861b1f588a0368fe1f5870bc713990ad1b29d5f743400bd971187641c done
+#36 exporting config sha256:5ef6b950c7e628e9a86af04b0399c61c0c0355bb389733f81b684c0bc1faaf23 done
+#36 exporting attestation manifest sha256:63c8cfd898ca92aa38175698895458e01d97e1f846c21c878a159f03ccc288ad 0.0s done
+#36 exporting manifest list sha256:5f898d9676c158df6fac4563e1ea8177da5c660a840bdb327dbb5550871f2431 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.2s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-frontend Built 
+ Image medium-clone-fullstack-backend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-07 00:00:15 - Services successfully rebuilt and restarted!
+2026-07-07 00:00:15 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-08 00:00:01 - Starting auto pull and rebuild process...
+2026-07-08 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-08 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-08 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-08 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-08 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 ...
+
+#5 [backend internal] load metadata for docker.io/library/alpine:latest
+#5 DONE 1.6s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.6s
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#7 ...
+
+#8 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#8 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#8 DONE 0.1s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#7 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#7 DONE 2.7s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B 0.0s done
+#10 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#11 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#11 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#11 DONE 0.1s
+
+#12 [backend internal] load build context
+#12 transferring context: 3.58kB 0.0s done
+#12 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:9097beb5536220f7857bdcb65c1b4b340630dd7a70b85f03d5af29640b06693d
+#13 resolve docker.io/library/golang:1.26-alpine@sha256:9097beb5536220f7857bdcb65c1b4b340630dd7a70b85f03d5af29640b06693d 0.1s done
+#13 DONE 0.3s
+
+#9 [frontend internal] load build context
+#9 transferring context: 4.49MB 2.1s done
+#9 DONE 2.1s
+
+#14 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#14 CACHED
+
+#15 [frontend builder 3/4] COPY . .
+#15 CACHED
+
+#16 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#16 CACHED
+
+#17 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#17 CACHED
+
+#18 [frontend builder 1/4] WORKDIR /app
+#18 CACHED
+
+#19 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#19 CACHED
+
+#20 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#20 CACHED
+
+#21 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#21 CACHED
+
+#22 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#22 CACHED
+
+#23 [frontend deps 2/4] WORKDIR /app
+#23 CACHED
+
+#24 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#24 CACHED
+
+#25 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#25 CACHED
+
+#26 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#26 CACHED
+
+#27 [frontend] exporting to image
+#27 exporting layers done
+#27 exporting manifest sha256:69bb6dbe1aadd51f5cbf9af02f956bda31231598e8c27bdab4e90856be0f5dcc done
+#27 exporting config sha256:aff573fe1bbfedd30999978e2fb2d89207b12e2601be14232facea3fc5ae4764 done
+#27 exporting attestation manifest sha256:8eb62249a3cb787ede7f16dd7a65da1634787d4eeda762dd33bfcaae864e73cf 0.0s done
+#27 exporting manifest list sha256:0664225d9b998fc09e0a69ec0874f87d20bf173fb3738842f6617a9892afad97 0.0s done
+#27 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#27 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#27 DONE 0.1s
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:9097beb5536220f7857bdcb65c1b4b340630dd7a70b85f03d5af29640b06693d
+#13 sha256:56bd32640bdfb6a9d786910d18868a249777b8689c6ef795f41a3c46968dd508 127B / 127B 0.3s done
+#13 sha256:6563b0ba6ce9e242d9162b6aee6a1a9aa1a38b009348c1fcb7beee0b41ee523d 0B / 245.07kB 1.1s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 2.10MB / 67.29MB 1.1s
+#13 ...
+
+#28 [frontend] resolving provenance for metadata file
+#28 DONE 0.0s
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:9097beb5536220f7857bdcb65c1b4b340630dd7a70b85f03d5af29640b06693d
+#13 sha256:6563b0ba6ce9e242d9162b6aee6a1a9aa1a38b009348c1fcb7beee0b41ee523d 245.07kB / 245.07kB 1.6s done
+#13 extracting sha256:6563b0ba6ce9e242d9162b6aee6a1a9aa1a38b009348c1fcb7beee0b41ee523d
+#13 extracting sha256:6563b0ba6ce9e242d9162b6aee6a1a9aa1a38b009348c1fcb7beee0b41ee523d 0.1s done
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 6.29MB / 67.29MB 2.1s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 10.49MB / 67.29MB 3.0s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 14.68MB / 67.29MB 3.9s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 18.87MB / 67.29MB 4.8s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 23.07MB / 67.29MB 5.7s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 27.26MB / 67.29MB 6.6s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 31.24MB / 67.29MB 7.5s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 35.65MB / 67.29MB 8.4s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 39.85MB / 67.29MB 9.5s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 44.04MB / 67.29MB 10.4s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 48.23MB / 67.29MB 11.4s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 52.43MB / 67.29MB 12.3s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 56.62MB / 67.29MB 13.2s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 60.82MB / 67.29MB 14.1s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 65.01MB / 67.29MB 15.0s
+#13 sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 67.29MB / 67.29MB 15.6s done
+#13 extracting sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910
+#13 extracting sha256:cea3d467f844b8e6fffc2d7793807a1ec9e3a0582655418c1c17013372a3a910 8.1s done
+#13 DONE 24.0s
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:9097beb5536220f7857bdcb65c1b4b340630dd7a70b85f03d5af29640b06693d
+#13 extracting sha256:56bd32640bdfb6a9d786910d18868a249777b8689c6ef795f41a3c46968dd508 0.0s done
+#13 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0.0s done
+#13 DONE 24.0s
+
+#29 [backend builder 2/6] WORKDIR /app
+#29 DONE 0.7s
+
+#30 [backend builder 3/6] COPY go.mod go.sum ./
+#30 DONE 0.1s
+
+#31 [backend builder 4/6] RUN go mod download
+#31 DONE 13.1s
+
+#32 [backend builder 5/6] COPY . .
+#32 DONE 0.3s
+
+#33 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#33 DONE 120.3s
+
+#34 [backend stage-1 2/3] WORKDIR /root/
+#34 CACHED
+
+#35 [backend stage-1 3/3] COPY --from=builder /api .
+#35 DONE 0.2s
+
+#36 [backend] exporting to image
+#36 exporting layers
+#36 exporting layers 4.0s done
+#36 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a
+#36 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a 0.0s done
+#36 exporting config sha256:c589e33c73d044522e834718af054ab2447ebdc13f824512030f94c3af858a57 0.0s done
+#36 exporting attestation manifest sha256:ad9b762897a19cfa87a57c7d76ba590d3877f11880b756348125135cfb4126e1 0.0s done
+#36 exporting manifest list sha256:280e217b0c82824a4c1b5a9332c41475fd91edab243d934d4c97fa4507cf5485
+#36 exporting manifest list sha256:280e217b0c82824a4c1b5a9332c41475fd91edab243d934d4c97fa4507cf5485 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-backend:latest
+#36 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.9s done
+#36 DONE 5.1s
+
+#37 [backend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-08 00:02:58 - Services successfully rebuilt and restarted!
+2026-07-08 00:02:58 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-09 00:00:01 - Starting auto pull and rebuild process...
+2026-07-09 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-09 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-09 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-09 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-09 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-frontend Building 
+ Image medium-clone-fullstack-backend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.6s
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 ...
+
+#6 [backend internal] load metadata for docker.io/library/alpine:latest
+#6 DONE 1.6s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 DONE 0.0s
+
+#9 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#9 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#9 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 DONE 2.2s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2 0.1s done
+#12 DONE 0.1s
+
+#13 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#13 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#13 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB 0.0s done
+#11 DONE 0.0s
+
+#14 [backend builder 4/6] RUN go mod download
+#14 CACHED
+
+#15 [backend builder 2/6] WORKDIR /app
+#15 CACHED
+
+#16 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#16 CACHED
+
+#17 [backend stage-1 2/3] WORKDIR /root/
+#17 CACHED
+
+#18 [backend builder 3/6] COPY go.mod go.sum ./
+#18 CACHED
+
+#19 [backend builder 5/6] COPY . .
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#8 [frontend internal] load build context
+#8 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a done
+#21 exporting config sha256:c589e33c73d044522e834718af054ab2447ebdc13f824512030f94c3af858a57 done
+#21 exporting attestation manifest sha256:a637aaed453e6bd5f252aad1696682a9cc1e34ae65d3df7ce9ff8b25f1459a06 0.0s done
+#21 exporting manifest list sha256:127c852071a948ad0eb7d63c937b02f667ed7a83e9368f90fd89605af66b83f7 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.2s
+
+#8 [frontend internal] load build context
+#8 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 transferring context: 4.49MB 1.9s done
+#8 DONE 2.0s
+
+#23 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#23 CACHED
+
+#24 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#24 CACHED
+
+#25 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#25 CACHED
+
+#26 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#26 CACHED
+
+#27 [frontend deps 2/4] WORKDIR /app
+#27 CACHED
+
+#28 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#28 CACHED
+
+#29 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#29 CACHED
+
+#30 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#30 CACHED
+
+#31 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#31 CACHED
+
+#32 [frontend builder 1/4] WORKDIR /app
+#32 CACHED
+
+#33 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#33 CACHED
+
+#34 [frontend builder 3/4] COPY . .
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:9a6553510e1c0c2622b7c31a40fb8020f808c36920357a76c8074638f4aa4028 done
+#36 exporting config sha256:46a61d851d431583365197a3cec8c831fb9ef3bf966be0a2dc694504dc8241dc done
+#36 exporting attestation manifest sha256:10976adffca2e41eaa7f56db2f08242fc3894038fd15323673887c3153416445 0.0s done
+#36 exporting manifest list sha256:0858d3828898f319e459755833e263b58ab94f52065115989c80d3252c9bb413 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.2s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-09 00:00:14 - Services successfully rebuilt and restarted!
+2026-07-09 00:00:14 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-10 00:00:01 - Starting auto pull and rebuild process...
+2026-07-10 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-10 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-10 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-10 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-10 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.7s
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 ...
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [backend internal] load metadata for docker.io/library/alpine:latest
+#7 DONE 1.8s
+
+#8 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#8 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#8 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 DONE 2.3s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2 0.1s done
+#12 DONE 0.1s
+
+#13 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#13 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#13 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB 0.0s done
+#11 DONE 0.0s
+
+#14 [backend stage-1 2/3] WORKDIR /root/
+#14 CACHED
+
+#15 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#15 CACHED
+
+#16 [backend builder 2/6] WORKDIR /app
+#16 CACHED
+
+#17 [backend builder 3/6] COPY go.mod go.sum ./
+#17 CACHED
+
+#18 [backend builder 4/6] RUN go mod download
+#18 CACHED
+
+#19 [backend builder 5/6] COPY . .
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#9 [frontend internal] load build context
+#9 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a done
+#21 exporting config sha256:c589e33c73d044522e834718af054ab2447ebdc13f824512030f94c3af858a57 done
+#21 exporting attestation manifest sha256:bb6ba7786121e84d5b654e86d46b9003cd0e2c1b5c58cac205325fc87a38c102 0.0s done
+#21 exporting manifest list sha256:c72771217740b3021c239c32eb3caa90a0dd80db15370481ca5e0cd4fe20f2c5 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.1s
+
+#9 [frontend internal] load build context
+#9 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 transferring context: 4.49MB 2.0s done
+#9 DONE 2.0s
+
+#23 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#23 CACHED
+
+#24 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#24 CACHED
+
+#25 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#25 CACHED
+
+#26 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#26 CACHED
+
+#27 [frontend builder 3/4] COPY . .
+#27 CACHED
+
+#28 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#28 CACHED
+
+#29 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#29 CACHED
+
+#30 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#30 CACHED
+
+#31 [frontend deps 2/4] WORKDIR /app
+#31 CACHED
+
+#32 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#32 CACHED
+
+#33 [frontend builder 1/4] WORKDIR /app
+#33 CACHED
+
+#34 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:9a6553510e1c0c2622b7c31a40fb8020f808c36920357a76c8074638f4aa4028 done
+#36 exporting config sha256:46a61d851d431583365197a3cec8c831fb9ef3bf966be0a2dc694504dc8241dc done
+#36 exporting attestation manifest sha256:25f20411948a793caac9177acb0ee04600c279c555448c3ce8beff3a5b2a7ece 0.0s done
+#36 exporting manifest list sha256:e693a96b29952fec24646691c33353213b23c39b25ca16cbd28faf2037572a86 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.2s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-10 00:00:14 - Services successfully rebuilt and restarted!
+2026-07-10 00:00:14 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-11 00:00:01 - Starting auto pull and rebuild process...
+2026-07-11 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-11 00:00:05 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-11 00:00:05 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-11 00:00:05 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-11 00:00:08 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-backend Building 
+ Image medium-clone-fullstack-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.8s
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 ...
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 DONE 0.0s
+
+#8 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#8 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#8 DONE 0.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#5 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#5 DONE 2.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#9 [backend internal] load metadata for docker.io/library/alpine:latest
+#9 DONE 2.4s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#11 [backend internal] load build context
+#11 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#12 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#12 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#12 DONE 0.1s
+
+#13 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2
+#13 resolve docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2 0.1s done
+#13 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 3.58kB 0.0s done
+#11 DONE 0.0s
+
+#14 [backend stage-1 2/3] WORKDIR /root/
+#14 CACHED
+
+#15 [backend builder 2/6] WORKDIR /app
+#15 CACHED
+
+#16 [backend builder 5/6] COPY . .
+#16 CACHED
+
+#17 [backend builder 4/6] RUN go mod download
+#17 CACHED
+
+#18 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#18 CACHED
+
+#19 [backend builder 3/6] COPY go.mod go.sum ./
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#7 [frontend internal] load build context
+#7 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a done
+#21 exporting config sha256:c589e33c73d044522e834718af054ab2447ebdc13f824512030f94c3af858a57 done
+#21 exporting attestation manifest sha256:3eeb0f9c9ac8ffc0ceeb1a1b02d06c3eca6215a721d353dde9cc754d45a833fe 0.0s done
+#21 exporting manifest list sha256:241521d4dc20d7e55e37b858979d2c4465750b17ab122f90b63f5d70983eaff3 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 transferring context: 4.49MB 2.0s done
+#7 DONE 2.1s
+
+#23 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#23 CACHED
+
+#24 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#24 CACHED
+
+#25 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#25 CACHED
+
+#26 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#26 CACHED
+
+#27 [frontend builder 3/4] COPY . .
+#27 CACHED
+
+#28 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#28 CACHED
+
+#29 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#29 CACHED
+
+#30 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#30 CACHED
+
+#31 [frontend deps 2/4] WORKDIR /app
+#31 CACHED
+
+#32 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#32 CACHED
+
+#33 [frontend builder 1/4] WORKDIR /app
+#33 CACHED
+
+#34 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:9a6553510e1c0c2622b7c31a40fb8020f808c36920357a76c8074638f4aa4028 done
+#36 exporting config sha256:46a61d851d431583365197a3cec8c831fb9ef3bf966be0a2dc694504dc8241dc 0.0s done
+#36 exporting attestation manifest sha256:6045f46c1960e26ec19c11b410ba414ef79faca785483f4d116ce530adf3e153 0.0s done
+#36 exporting manifest list sha256:c5c84b24ddb7eccb5b8712411d536a28d8033f5d8c251b633eb2ae504e5e4ec2 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.1s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_redis Running 
+ Container medium_db Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-11 00:00:15 - Services successfully rebuilt and restarted!
+2026-07-11 00:00:15 - Auto pull and rebuild check finished.
+------------------------------------------------
+2026-07-12 00:00:01 - Starting auto pull and rebuild process...
+2026-07-12 00:00:01 - Fetching latest changes from origin...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+2026-07-12 00:00:04 - Local hash: d3e2d4438fccbe407d93a559562fa39d1ce60973
+2026-07-12 00:00:04 - Remote hash: 620619cf067ec0a073bc604bcbb292a750ca1778
+2026-07-12 00:00:04 - New updates found on branch main. Pulling changes...
+From github.com:MujiRahman/medium-clone-fullstack
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+2026-07-12 00:00:07 - Rebuilding and restarting docker compose services...
+ Image medium-clone-fullstack-frontend Building 
+ Image medium-clone-fullstack-backend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 321B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 828B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 ...
+
+#5 [backend internal] load metadata for docker.io/library/alpine:latest
+#5 DONE 1.8s
+
+#4 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.7s
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 DONE 0.0s
+
+#8 [frontend base 1/1] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#8 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#8 DONE 0.1s
+
+#9 [backend internal] load metadata for docker.io/library/golang:1.26-alpine
+#9 DONE 2.4s
+
+#10 [backend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#11 [backend stage-1 1/3] FROM docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+#11 resolve docker.io/library/alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b 0.1s done
+#11 DONE 0.1s
+
+#12 [backend builder 1/6] FROM docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2
+#12 resolve docker.io/library/golang:1.26-alpine@sha256:0178a641fbb4858c5f1b48e34bdaabe0350a330a1b1149aabd498d0699ff5fb2 0.1s done
+#12 DONE 0.1s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#13 [backend internal] load build context
+#13 transferring context: 3.58kB done
+#13 DONE 0.0s
+
+#14 [backend builder 4/6] RUN go mod download
+#14 CACHED
+
+#15 [backend builder 5/6] COPY . .
+#15 CACHED
+
+#16 [backend builder 6/6] RUN CGO_ENABLED=0 GOOS=linux go build -o /api cmd/api/main.go
+#16 CACHED
+
+#17 [backend stage-1 2/3] WORKDIR /root/
+#17 CACHED
+
+#18 [backend builder 2/6] WORKDIR /app
+#18 CACHED
+
+#19 [backend builder 3/6] COPY go.mod go.sum ./
+#19 CACHED
+
+#20 [backend stage-1 3/3] COPY --from=builder /api .
+#20 CACHED
+
+#7 [frontend internal] load build context
+#7 ...
+
+#21 [backend] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:eb017a5045d1ffb94df7bf491e5b050bb439ead01ca052ab384f2c5bac33093a done
+#21 exporting config sha256:c589e33c73d044522e834718af054ab2447ebdc13f824512030f94c3af858a57 done
+#21 exporting attestation manifest sha256:e640ecbcb519d32a68ed974b03860c2bacf6687b433741cef389744f8c5baf8e 0.0s done
+#21 exporting manifest list sha256:2f418be8e23335a0be0c4647d40961c70bd9db3ee370aac19e0c98272710cf38 0.0s done
+#21 naming to docker.io/library/medium-clone-fullstack-backend:latest done
+#21 unpacking to docker.io/library/medium-clone-fullstack-backend:latest 0.0s done
+#21 DONE 0.2s
+
+#7 [frontend internal] load build context
+#7 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#7 [frontend internal] load build context
+#7 transferring context: 4.49MB 2.1s done
+#7 DONE 2.1s
+
+#23 [frontend deps 4/4] RUN npm install -g pnpm && pnpm install
+#23 CACHED
+
+#24 [frontend deps 2/4] WORKDIR /app
+#24 CACHED
+
+#25 [frontend runner 3/6] RUN adduser --system --uid 1001 nextjs
+#25 CACHED
+
+#26 [frontend runner 4/6] COPY --from=builder /app/public ./public
+#26 CACHED
+
+#27 [frontend builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+#27 CACHED
+
+#28 [frontend runner 2/6] RUN addgroup --system --gid 1001 nodejs
+#28 CACHED
+
+#29 [frontend deps 1/4] RUN apk add --no-cache libc6-compat
+#29 CACHED
+
+#30 [frontend deps 3/4] COPY package.json pnpm-lock.yaml* ./
+#30 CACHED
+
+#31 [frontend builder 3/4] COPY . .
+#31 CACHED
+
+#32 [frontend builder 4/4] RUN npm install -g pnpm && pnpm run build
+#32 CACHED
+
+#33 [frontend builder 1/4] WORKDIR /app
+#33 CACHED
+
+#34 [frontend runner 5/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#34 CACHED
+
+#35 [frontend runner 6/6] COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#35 CACHED
+
+#36 [frontend] exporting to image
+#36 exporting layers done
+#36 exporting manifest sha256:9a6553510e1c0c2622b7c31a40fb8020f808c36920357a76c8074638f4aa4028 done
+#36 exporting config sha256:46a61d851d431583365197a3cec8c831fb9ef3bf966be0a2dc694504dc8241dc done
+#36 exporting attestation manifest sha256:0dba4c478a0e45eeff30b50bb4d331e41c8baab0ea22a52056f88b28e1058d4f 0.0s done
+#36 exporting manifest list sha256:6315ad88457a5a37ceed2839a719c6414e19cd975041d64debdad9545137377d 0.0s done
+#36 naming to docker.io/library/medium-clone-fullstack-frontend:latest done
+#36 unpacking to docker.io/library/medium-clone-fullstack-frontend:latest 0.0s done
+#36 DONE 0.1s
+
+#37 [frontend] resolving provenance for metadata file
+#37 DONE 0.0s
+ Image medium-clone-fullstack-backend Built 
+ Image medium-clone-fullstack-frontend Built 
+ Container medium_db Running 
+ Container medium_redis Running 
+ Container medium_backend Recreate 
+ Container medium_backend Recreated 
+ Container medium_frontend Recreate 
+ Container medium_frontend Recreated 
+ Container medium_backend Starting 
+ Container medium_backend Started 
+ Container medium_frontend Starting 
+ Container medium_frontend Started 
+2026-07-12 00:00:14 - Services successfully rebuilt and restarted!
+2026-07-12 00:00:14 - Auto pull and rebuild check finished.
+------------------------------------------------

@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -60,18 +61,40 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Set HttpOnly cookie, Lax untuk local cross-port
+	// Set HttpOnly cookie
 	// MaxAge 24 hours = 86400 seconds
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("jwt_token", token, 86400, "/", "", false, true)
+	cookieSecure := os.Getenv("COOKIE_SECURE") == "true"
+	sameSiteMode := http.SameSiteLaxMode
+	if envSameSite := os.Getenv("COOKIE_SAMESITE"); envSameSite != "" {
+		switch envSameSite {
+		case "none":
+			sameSiteMode = http.SameSiteNoneMode
+		case "strict":
+			sameSiteMode = http.SameSiteStrictMode
+		}
+	}
+
+	c.SetSameSite(sameSiteMode)
+	c.SetCookie("jwt_token", token, 86400, "/", "", cookieSecure, true)
 
 	response.JSON(c, http.StatusOK, "Login successful", nil)
 }
 
 func (h *AuthHandler) Logout(c *gin.Context) {
+	cookieSecure := os.Getenv("COOKIE_SECURE") == "true"
+	sameSiteMode := http.SameSiteLaxMode
+	if envSameSite := os.Getenv("COOKIE_SAMESITE"); envSameSite != "" {
+		switch envSameSite {
+		case "none":
+			sameSiteMode = http.SameSiteNoneMode
+		case "strict":
+			sameSiteMode = http.SameSiteStrictMode
+		}
+	}
+
 	// Clear the cookie by setting negative MaxAge
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("jwt_token", "", -1, "/", "", false, true)
+	c.SetSameSite(sameSiteMode)
+	c.SetCookie("jwt_token", "", -1, "/", "", cookieSecure, true)
 
 	response.JSON(c, http.StatusOK, "Logout successful", nil)
 }
