@@ -23,6 +23,7 @@ func SetupRouter(
 	followHandler *handler.FollowHandler,
 	notificationHandler *handler.NotificationHandler,
 	searchHandler *handler.SearchHandler,
+	uploadHandler *handler.UploadHandler,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -113,6 +114,12 @@ func SetupRouter(
 			ai := protected.Group("/ai")
 			{
 				ai.POST("/generate", aiHandler.Generate)
+			}
+
+			// Upload Routes
+			upload := protected.Group("/upload")
+			{
+				upload.POST("/image", uploadHandler.UploadImage)
 			}
 		}
 	}

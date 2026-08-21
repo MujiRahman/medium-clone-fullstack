@@ -7,17 +7,20 @@ import { ThreadedComments } from "@/components/ThreadedComments";
 import { AudioReader } from '@/components/AudioReader';
 import { AnalyticsTracker } from '@/components/AnalyticsTracker';
 import { FollowButton } from '@/components/FollowButton';
+import { Header } from '@/components/Header';
 
 interface Story {
   id: string;
   slug: string;
   title: string;
   content: string;
+  cover_image?: string;
   status: string;
   published_at: string;
   total_claps: number;
   author: {
     username: string;
+    avatar_url?: string;
   };
 }
 
@@ -50,16 +53,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Story Not Found' };
   }
 
-  const excerpt = getExcerpt(story.content, 160);
+  const description = getExcerpt(story.content, 160);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const ogImageUrl = `${siteUrl}/api/og?title=${encodeURIComponent(story.title)}&author=${encodeURIComponent(story.author.username)}`;
 
   return {
     title: `${story.title} - Medium Clone`,
-    description: excerpt,
+    description: description,
     openGraph: {
       title: story.title,
-      description: excerpt,
+      description: description,
       type: 'article',
       authors: [story.author.username],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: story.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: story.title,
+      description: description,
+      images: [ogImageUrl],
     },
   };
 }
@@ -108,19 +120,7 @@ export default async function StoryPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <header className="border-b border-border bg-background">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="font-serif text-2xl font-bold tracking-tight">
-            Medium Clone
-          </Link>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Link href="/new-story" className="text-sm font-medium hover:underline text-muted-foreground mr-4">
-              Write
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-3xl px-6 pt-12 pb-24">
         <AnalyticsTracker storyId={story.id} />
@@ -129,12 +129,32 @@ export default async function StoryPage({ params }: PageProps) {
           <h1 className="font-sans text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-6">
             {story.title}
           </h1>
+
+          {/* Cover Image Hero */}
+          {story.cover_image && (
+            <div className="relative w-full aspect-[2/1] mb-8 rounded-xl overflow-hidden">
+              <img
+                src={story.cover_image}
+                alt={story.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
           <div className="flex items-center gap-4 mb-6">
-            {/* Avatar Placeholder */}
+            {/* Avatar */}
             <Link href={`/[username]`} as={`/${story.author.username}`}>
-              <div className="h-12 w-12 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center justify-center font-bold text-muted-foreground cursor-pointer">
-                {story.author.username.charAt(0).toUpperCase()}
-              </div>
+              {story.author.avatar_url ? (
+                <img
+                  src={story.author.avatar_url}
+                  alt={story.author.username}
+                  className="h-12 w-12 rounded-full object-cover hover:opacity-80 transition-opacity cursor-pointer"
+                />
+              ) : (
+                <div className="h-12 w-12 rounded-full bg-muted hover:bg-muted/80 transition-colors flex items-center justify-center font-bold text-muted-foreground cursor-pointer">
+                  {story.author.username.charAt(0).toUpperCase()}
+                </div>
+              )}
             </Link>
             <div className="flex flex-col">
               <div className="flex items-center gap-3">

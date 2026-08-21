@@ -24,6 +24,7 @@ type Story struct {
 	Content     string      `gorm:"type:text" json:"content"`
 	TLDR        string      `gorm:"type:text" json:"tldr"`
 	Tags        string      `gorm:"type:text" json:"tags"`
+	CoverImage  string      `gorm:"type:text" json:"cover_image"`
 	Status      StoryStatus `gorm:"type:varchar(20);not null" json:"status"`
 	TotalClaps  int         `gorm:"->" json:"total_claps"`
 	PublishedAt *time.Time  `json:"published_at"`

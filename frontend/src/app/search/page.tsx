@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import api from "@/lib/api/axios";
 import Link from "next/link";
-import { HeaderNav } from "@/components/HeaderNav";
+import { Header } from "@/components/Header";
 import { useAuthStore } from "@/lib/store/authStore";
 import { FollowButton } from "@/components/FollowButton";
 
@@ -75,14 +75,7 @@ function SearchResultsContent() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-border">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="font-serif text-2xl font-bold tracking-tight">
-            Medium Clone
-          </Link>
-          <HeaderNav />
-        </div>
-      </header>
+      <Header />
 
       {/* Main Search Layout */}
       <main className="mx-auto max-w-3xl px-6 py-12">

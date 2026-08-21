@@ -8,6 +8,7 @@ import (
 	"medium-clone/internal/delivery/http/handler"
 	"medium-clone/internal/delivery/http/router"
 	"medium-clone/internal/repository/postgres"
+	minioRepo "medium-clone/internal/repository/minio"
 	"medium-clone/internal/usecase"
 	jwtutils "medium-clone/pkg/jwt"
 
@@ -25,6 +26,7 @@ func main() {
 	// 1. Init Database (and Auto Migrate)
 	db := config.InitDatabase()
 	rdb := config.InitRedis()
+	minioClient := config.InitMinIO()
 
 	// 2. Init Repositories & Usecases
 	userRepo := postgres.NewUserRepository(db)
@@ -50,6 +52,9 @@ func main() {
 
 	searchUseCase := usecase.NewSearchUseCase(db)
 
+	uploadRepo := minioRepo.NewUploadRepository(minioClient)
+	uploadUseCase := usecase.NewUploadUseCase(uploadRepo)
+
 	// 3. Init Handlers
 	authHandler := handler.NewAuthHandler(authUseCase)
 	userHandler := handler.NewUserHandler(userRepo, storyRepo, followUseCase)
@@ -60,6 +65,7 @@ func main() {
 	followHandler := handler.NewFollowHandler(followUseCase, userRepo)
 	notificationHandler := handler.NewNotificationHandler(notifUseCase)
 	searchHandler := handler.NewSearchHandler(searchUseCase)
+	uploadHandler := handler.NewUploadHandler(uploadUseCase)
 
 	// 4. Setup Router
 	r := router.SetupRouter(
@@ -72,6 +78,7 @@ func main() {
 		followHandler,
 		notificationHandler,
 		searchHandler,
+		uploadHandler,
 	)
 
 	// 5. Run Server

@@ -3,10 +3,11 @@
 import { useAuthStore } from "@/lib/store/authStore";
 import { useEffect, useState } from "react";
 import api from "@/lib/api/axios";
-import { HeaderNav } from "@/components/HeaderNav";
+import { Header } from "@/components/Header";
 import { FollowButton } from "@/components/FollowButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import ImageUploader, { UploadResult } from "@/components/ImageUploader";
 
 interface Story {
   id: string;
@@ -22,6 +23,7 @@ interface ProfileUser {
   id: string;
   username: string;
   bio?: string;
+  avatar_url?: string;
   followers_count: number;
   following_count: number;
 }
@@ -106,14 +108,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-border">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="font-serif text-2xl font-bold tracking-tight">
-            Medium Clone
-          </Link>
-          <HeaderNav />
-        </div>
-      </header>
+      <Header />
 
       {/* Profile Main Page */}
       <main className="mx-auto max-w-4xl px-6 py-12 flex flex-col md:flex-row gap-12">
@@ -172,8 +167,69 @@ export default function ProfilePage({ params }: { params: { username: string } }
           <div className="p-6 rounded-2xl border border-border/40 bg-muted/20 backdrop-blur-sm sticky top-6">
             
             {/* User Avatar & Title */}
-            <div className="h-16 w-16 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-2xl select-none mb-4">
-              {user.username.charAt(0).toUpperCase()}
+            <div className="mb-4">
+              {isSelf ? (
+                <div className="relative w-20 h-20">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.username}
+                      className="w-20 h-20 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-20 w-20 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-3xl select-none">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <label className="absolute -bottom-1 -right-1 p-1.5 bg-green-600 hover:bg-green-700 rounded-full cursor-pointer transition-colors shadow-lg">
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        try {
+                          const imageCompression = (await import("browser-image-compression")).default;
+                          const compressed = await imageCompression(file, {
+                            maxSizeMB: 0.5,
+                            maxWidthOrHeight: 800,
+                            useWebWorker: true,
+                          });
+                          const formData = new FormData();
+                          formData.append("file", compressed, compressed.name || "avatar.jpg");
+                          formData.append("type", "avatar");
+                          const uploadRes = await api.post("/upload/image", formData, {
+                            headers: { "Content-Type": "multipart/form-data" },
+                          });
+                          const result = uploadRes.data.data as UploadResult;
+                          await api.put(`/users/${username}`, { avatar_url: result.url });
+                          setProfile((prev) => {
+                            if (!prev) return null;
+                            return { ...prev, user: { ...prev.user, avatar_url: result.url } };
+                          });
+                        } catch (err) {
+                          console.error("Avatar upload failed:", err);
+                        }
+                      }}
+                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                      <circle cx="12" cy="13" r="4" />
+                    </svg>
+                  </label>
+                </div>
+              ) : user.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt={user.username}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+              ) : (
+                <div className="h-16 w-16 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-2xl select-none">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
             
             <h1 className="font-sans text-2xl font-bold tracking-tight text-foreground">

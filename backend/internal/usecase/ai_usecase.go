@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,7 +14,7 @@ import (
 )
 
 type AIUseCase interface {
-	GenerateText(action string, text string, customPrompt string) (string, error)
+	GenerateText(ctx context.Context, action string, text string, customPrompt string) (string, error)
 }
 
 type aiUseCase struct {
@@ -50,7 +51,7 @@ type GeminiResponse struct {
 	} `json:"candidates"`
 }
 
-func (u *aiUseCase) GenerateText(action string, text string, customPrompt string) (string, error) {
+func (u *aiUseCase) GenerateText(ctx context.Context, action string, text string, customPrompt string) (string, error) {
 	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
 		return "", errors.New("GEMINI_API_KEY is not set in backend configuration")

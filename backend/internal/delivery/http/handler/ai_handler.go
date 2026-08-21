@@ -30,7 +30,7 @@ func (h *AIHandler) Generate(c *gin.Context) {
 		return
 	}
 
-	result, err := h.aiUseCase.GenerateText(req.Action, req.Text, req.CustomPrompt)
+	result, err := h.aiUseCase.GenerateText(c.Request.Context(), req.Action, req.Text, req.CustomPrompt)
 	if err != nil {
 		response.JSON(c, http.StatusInternalServerError, err.Error(), nil)
 		return

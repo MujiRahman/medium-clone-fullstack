@@ -63,6 +63,7 @@ func (h *UserHandler) GetProfile(c *gin.Context) {
 			"username":        user.Username,
 			"email":           user.Email,
 			"bio":             user.Bio,
+			"avatar_url":      user.AvatarURL,
 			"followers_count": followersCount,
 			"following_count": followingCount,
 		},
@@ -73,7 +74,8 @@ func (h *UserHandler) GetProfile(c *gin.Context) {
 }
 
 type UpdateProfileReq struct {
-	Bio string `json:"bio" binding:"required"`
+	Bio       *string `json:"bio"`
+	AvatarURL *string `json:"avatar_url"`
 }
 
 func (h *UserHandler) UpdateProfile(c *gin.Context) {
@@ -108,16 +110,22 @@ func (h *UserHandler) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	targetUser.Bio = req.Bio
+	if req.Bio != nil {
+		targetUser.Bio = *req.Bio
+	}
+	if req.AvatarURL != nil {
+		targetUser.AvatarURL = *req.AvatarURL
+	}
 	if err := h.userRepo.UpdateUser(targetUser); err != nil {
 		response.JSON(c, http.StatusInternalServerError, "Failed to update profile", nil)
 		return
 	}
 
 	response.JSON(c, http.StatusOK, "Profile updated successfully", gin.H{
-		"id":       targetUser.ID,
-		"username": targetUser.Username,
-		"bio":      targetUser.Bio,
+		"id":         targetUser.ID,
+		"username":   targetUser.Username,
+		"bio":        targetUser.Bio,
+		"avatar_url": targetUser.AvatarURL,
 	})
 }
 

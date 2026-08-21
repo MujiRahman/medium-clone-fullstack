@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -8,8 +9,8 @@ import (
 	"medium-clone/internal/repository/postgres"
 	"sort"
 	"strings"
+	"sync"
 	"time"
-	"context"
 
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
@@ -19,12 +20,21 @@ type AnalyticsUseCase interface {
 	TrackView(articleID uuid.UUID, source string, duration int) error
 	GetStats(authorID uuid.UUID, timeframe string) (*domain.DashboardStats, error)
 	GetInsights(authorID uuid.UUID) ([]domain.AIInsight, error)
+	
+	// Real-time active readers methods (Mutex example)
+	AddActiveReader(articleID uuid.UUID)
+	RemoveActiveReader(articleID uuid.UUID)
+	GetActiveReaders(articleID uuid.UUID) int
 }
 
 type analyticsUseCase struct {
 	analyticsRepo postgres.AnalyticsRepository
 	aiUseCase     AIUseCase
 	rdb           *redis.Client
+
+	// For Mutex example
+	mu            sync.Mutex
+	activeReaders map[uuid.UUID]int
 }
 
 func NewAnalyticsUseCase(repo postgres.AnalyticsRepository, aiUC AIUseCase, rdb *redis.Client) AnalyticsUseCase {
@@ -32,6 +42,7 @@ func NewAnalyticsUseCase(repo postgres.AnalyticsRepository, aiUC AIUseCase, rdb 
 		analyticsRepo: repo,
 		aiUseCase:     aiUC,
 		rdb:           rdb,
+		activeReaders: make(map[uuid.UUID]int),
 	}
 }
 
@@ -43,6 +54,26 @@ func (u *analyticsUseCase) TrackView(articleID uuid.UUID, source string, duratio
 		Duration:  duration,
 	}
 	return u.analyticsRepo.CreateRecord(record)
+}
+
+func (u *analyticsUseCase) AddActiveReader(articleID uuid.UUID) {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	u.activeReaders[articleID]++
+}
+
+func (u *analyticsUseCase) RemoveActiveReader(articleID uuid.UUID) {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	if u.activeReaders[articleID] > 0 {
+		u.activeReaders[articleID]--
+	}
+}
+
+func (u *analyticsUseCase) GetActiveReaders(articleID uuid.UUID) int {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	return u.activeReaders[articleID]
 }
 
 func (u *analyticsUseCase) GetStats(authorID uuid.UUID, timeframe string) (*domain.DashboardStats, error) {
@@ -389,7 +420,10 @@ Respond ONLY with the raw JSON array. Do not wrap it in markdown code fences or 
 Statistics:
 %s`, string(statsJSON))
 
-	aiResult, err := u.aiUseCase.GenerateText("custom", "", prompt)
+	aiCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	aiResult, err := u.aiUseCase.GenerateText(aiCtx, "custom", "", prompt)
 	if err == nil && aiResult != "" {
 		var generatedInsights []domain.AIInsight
 		if errDec := json.Unmarshal([]byte(aiResult), &generatedInsights); errDec == nil && len(generatedInsights) > 0 {

@@ -15,16 +15,18 @@ import (
 )
 
 type CreateStoryReq struct {
-	Title   string `json:"title" binding:"required"`
-	Content string `json:"content" binding:"required"`
+	Title      string `json:"title" binding:"required"`
+	Content    string `json:"content" binding:"required"`
+	CoverImage string `json:"cover_image"`
 }
 
 type UpdateStoryReq struct {
-	Title   string  `json:"title"`
-	Content string  `json:"content"`
-	Status  *string `json:"status"` // Optional field, if changing to published
-	TLDR    string  `json:"tldr"`
-	Tags    string  `json:"tags"`
+	Title      string  `json:"title"`
+	Content    string  `json:"content"`
+	Status     *string `json:"status"` // Optional field, if changing to published
+	TLDR       string  `json:"tldr"`
+	Tags       string  `json:"tags"`
+	CoverImage string  `json:"cover_image"`
 }
 
 type AddClapReq struct {
@@ -70,11 +72,12 @@ func NewStoryUseCase(
 
 func (u *storyUseCase) CreateDraft(authorID uuid.UUID, req CreateStoryReq) (*domain.Story, error) {
 	story := &domain.Story{
-		AuthorID: authorID,
-		Title:    req.Title,
-		Content:  req.Content,
-		Slug:     utils.GenerateUniqueSlug(req.Title),
-		Status:   domain.StoryStatusDraft,
+		AuthorID:   authorID,
+		Title:      req.Title,
+		Content:    req.Content,
+		CoverImage: req.CoverImage,
+		Slug:       utils.GenerateUniqueSlug(req.Title),
+		Status:     domain.StoryStatusDraft,
 	}
 
 	if err := u.storyRepo.CreateStory(story); err != nil {
@@ -115,6 +118,9 @@ func (u *storyUseCase) UpdateStory(reqUserID uuid.UUID, storyID uuid.UUID, req U
 	}
 	if req.Tags != "" {
 		story.Tags = req.Tags
+	}
+	if req.CoverImage != "" {
+		story.CoverImage = req.CoverImage
 	}
 
 	if req.Status != nil {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { calculateReadingTime, getExcerpt } from "@/lib/htmlParser";
-import { HeaderNav } from "@/components/HeaderNav";
+import { Header } from "@/components/Header";
 
 // Menggunakan tipe parsial yang setara dengan response backend
 interface Story {
@@ -8,11 +8,13 @@ interface Story {
   slug: string;
   title: string;
   content: string;
+  cover_image?: string;
   status: string;
   published_at: string;
   total_claps: number;
   author: {
     username: string;
+    avatar_url?: string;
   };
   tldr?: string;
   tags?: string;
@@ -46,14 +48,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header Topbar */}
-      <header className="border-b border-border">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="font-serif text-2xl font-bold tracking-tight">
-            Medium Clone
-          </Link>
-          <HeaderNav />
-        </div>
-      </header>
+      <Header />
 
       {/* Main Feed Content */}
       <main className="mx-auto max-w-3xl px-6 py-12">
@@ -73,41 +68,67 @@ export default async function Home() {
               });
 
               return (
-                <article key={story.id} className="group flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span className="font-medium text-foreground">{story.author?.username}</span>
-                    <span>·</span>
-                    <time dateTime={story.published_at}>{publishDate}</time>
-                  </div>
-
-                  <Link href={`/story/[slug]`} as={`/story/${story.slug}`} className="cursor-pointer">
-                    <h2 className="font-sans text-2xl font-bold font-extrabold group-hover:underline">
-                      {story.title}
-                    </h2>
-                    <p className="mt-2 font-serif text-muted-foreground line-clamp-3">
-                      {story.tldr || excerpt}
-                    </p>
-                  </Link>
-
-                  {story.tags && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {story.tags.split(",").map((t) => t.trim()).filter((t) => t.length > 0).map((tag, idx) => (
-                        <span key={idx} className="text-[10px] font-semibold bg-muted dark:bg-zinc-800 text-muted-foreground px-2 py-0.5 rounded-full border border-border/40">
-                          #{tag}
-                        </span>
-                      ))}
+                <article key={story.id} className="group flex gap-4">
+                  <div className="flex-1 flex flex-col gap-2 min-w-0">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      {story.author?.avatar_url ? (
+                        <img
+                          src={story.author.avatar_url}
+                          alt={story.author.username}
+                          className="w-5 h-5 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground">
+                          {story.author?.username?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="font-medium text-foreground">{story.author?.username}</span>
+                      <span>·</span>
+                      <time dateTime={story.published_at}>{publishDate}</time>
                     </div>
-                  )}
 
-                  <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                    <span>{readingTime} min read</span>
-                    {story.total_claps > 0 && (
-                      <span className="flex items-center gap-1">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.2 3.2C9.4 2.4 8 2.4 7.2 3.2C6.4 4 6.4 5.4 7.2 6.2L12 11M14.2 3.2C13.4 2.4 12 2.4 11.2 3.2C10.4 4 10.4 5.4 11.2 6.2L16 11M3.2 10.2C2.4 9.4 2.4 8 3.2 7.2C4 6.4 5.4 6.4 6.2 7.2L11 12M17.2 3.2C16.4 2.4 15 2.4 14.2 3.2C13.4 4 13.4 5.4 14.2 6.2L19 11M2.2 15.2C1.4 16 1.4 17.4 2.2 18.2C3 19 4.4 19 5.2 18.2L11 12.4M12.4 11L18.2 5.2C19 4.4 20.4 4.4 21.2 5.2C22 6 22 7.4 21.2 8.2L15.4 14M14 15.4L8.2 21.2C7.4 22 6 22 5.2 21.2C4.4 20.4 4.4 19 5.2 18.2L11 12.4" /></svg>
-                        {story.total_claps}
-                      </span>
+                    <Link href={`/story/[slug]`} as={`/story/${story.slug}`} className="cursor-pointer">
+                      <h2 className="font-sans text-2xl font-bold font-extrabold group-hover:underline">
+                        {story.title}
+                      </h2>
+                      <p className="mt-2 font-serif text-muted-foreground line-clamp-3">
+                        {story.tldr || excerpt}
+                      </p>
+                    </Link>
+
+                    {story.tags && (
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {story.tags.split(",").map((t) => t.trim()).filter((t) => t.length > 0).map((tag, idx) => (
+                          <span key={idx} className="text-[10px] font-semibold bg-muted dark:bg-zinc-800 text-muted-foreground px-2 py-0.5 rounded-full border border-border/40">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
                     )}
+
+                    <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                      <span>{readingTime} min read</span>
+                      {story.total_claps > 0 && (
+                        <span className="flex items-center gap-1">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.2 3.2C9.4 2.4 8 2.4 7.2 3.2C6.4 4 6.4 5.4 7.2 6.2L12 11M14.2 3.2C13.4 2.4 12 2.4 11.2 3.2C10.4 4 10.4 5.4 11.2 6.2L16 11M3.2 10.2C2.4 9.4 2.4 8 3.2 7.2C4 6.4 5.4 6.4 6.2 7.2L11 12M17.2 3.2C16.4 2.4 15 2.4 14.2 3.2C13.4 4 13.4 5.4 14.2 6.2L19 11M2.2 15.2C1.4 16 1.4 17.4 2.2 18.2C3 19 4.4 19 5.2 18.2L11 12.4M12.4 11L18.2 5.2C19 4.4 20.4 4.4 21.2 5.2C22 6 22 7.4 21.2 8.2L15.4 14M14 15.4L8.2 21.2C7.4 22 6 22 5.2 21.2C4.4 20.4 4.4 19 5.2 18.2L11 12.4" /></svg>
+                          {story.total_claps}
+                        </span>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Cover Image Thumbnail */}
+                  {story.cover_image && (
+                    <Link href={`/story/[slug]`} as={`/story/${story.slug}`} className="shrink-0">
+                      <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-md overflow-hidden">
+                        <img
+                          src={story.cover_image}
+                          alt={story.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    </Link>
+                  )}
                 </article>
               );
             })}

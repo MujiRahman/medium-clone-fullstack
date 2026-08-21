@@ -21,6 +21,20 @@ services:
     volumes:
       - redisdata:/data
 
+  minio:
+    image: minio/minio:latest
+    container_name: medium_minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+
   backend:
     build:
       context: ./backend
@@ -41,9 +55,16 @@ services:
       - JWT_SECRET=super_secret_jwt_key_ubah_ini_di_productionqwertyuiopasdfghjkl0987654erfghjkbvczxcv0987654wdfghjnbfde34567uikjn
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-AQ.Ab8RN6K7V-XcsehIPKddx5SKtDmyZ1cKNE_7tOCVcRFAdzYNHg}
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin123}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-medium-uploads}
+      - MINIO_USE_SSL=false
+      - MINIO_PUBLIC_URL=${MINIO_PUBLIC_URL:-http://localhost:9000}
     depends_on:
       - db
       - redis
+      - minio
 
   frontend:
     build:
@@ -51,12 +72,14 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8080/api}
+        - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
     container_name: medium_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8080/api}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
       - INTERNAL_API_URL=http://backend:8080/api
     depends_on:
       - backend
@@ -64,3 +87,4 @@ services:
 volumes:
   pgdata:
   redisdata:
+  minio_data:

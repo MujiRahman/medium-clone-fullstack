@@ -128,9 +128,10 @@ func (h *AuthHandler) GetMe(c *gin.Context) {
 
 	// Only return safe public info
 	publicInfo := map[string]interface{}{
-		"id":       user.ID,
-		"username": user.Username,
-		"email":    user.Email,
+		"id":         user.ID,
+		"username":   user.Username,
+		"email":      user.Email,
+		"avatar_url": user.AvatarURL,
 	}
 
 	response.JSON(c, http.StatusOK, "Success", publicInfo)

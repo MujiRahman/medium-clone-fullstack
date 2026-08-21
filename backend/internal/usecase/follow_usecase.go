@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"medium-clone/internal/domain"
 	"medium-clone/internal/repository/postgres"
@@ -73,13 +74,31 @@ func (u *followUseCase) IsFollowing(ctx context.Context, followerID, followingID
 }
 
 func (u *followUseCase) GetFollowStats(ctx context.Context, userID uuid.UUID) (followers int64, following int64, err error) {
-	followers, err = u.followRepo.GetFollowersCount(userID)
-	if err != nil {
-		return 0, 0, err
+	var wg sync.WaitGroup
+	var errFollowers, errFollowing error
+
+	// We have 2 concurrent tasks
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		followers, errFollowers = u.followRepo.GetFollowersCount(userID)
+	}()
+
+	go func() {
+		defer wg.Done()
+		following, errFollowing = u.followRepo.GetFollowingCount(userID)
+	}()
+
+	// Wait for both tasks to complete
+	wg.Wait()
+
+	if errFollowers != nil {
+		return 0, 0, errFollowers
 	}
-	following, err = u.followRepo.GetFollowingCount(userID)
-	if err != nil {
-		return 0, 0, err
+	if errFollowing != nil {
+		return 0, 0, errFollowing
 	}
+
 	return followers, following, nil
 }

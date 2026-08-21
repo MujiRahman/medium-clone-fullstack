@@ -24,12 +24,14 @@ JWT_SECRET=super_secret_jwt_key_ubah_ini_di_production
 
 > **Catatan**: Aplikasi menggunakan prinsip *Fail-Fast*. Jika `JWT_SECRET` tidak ada saat aplikasi menyala, *server* otomatis menolak hidup (panik `log.Fatalf`).
 
+jalankan colima start untuk jalankan docker di macbook
+
 ## 2. Menyalakan Infrastruktur Database (Docker Compose)
 Untuk menjalankan PostgreSQL dan Redis lokal sebagai Daemon (Background):
 1. Buka terminal di direktori induk (root di mana file `docker-compose.yml` berada).
 2. Jalankan perintah eksklusif:
    ```bash
-   docker-compose up -d db redis
+   docker-compose up -d db redis minio
    ```
 3. Docker akan mengunduh _images_ dan meluncurkan *Database* di port `5432`.
 
