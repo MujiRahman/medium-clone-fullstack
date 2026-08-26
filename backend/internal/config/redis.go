@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -20,9 +21,14 @@ func InitRedis() *redis.Client {
 	}
 
 	client := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", host, port),
-		Password: "", // no password set by default in docker-compose
-		DB:       0,  // use default DB
+		Addr:         fmt.Sprintf("%s:%s", host, port),
+		Password:     "",              // no password set by default in docker-compose
+		DB:           0,               // use default DB
+		PoolSize:     50,              // Maksimal 50 koneksi berbarengan ke Redis
+		MinIdleConns: 10,              // Selalu siapkan 10 koneksi nganggur agar cepat merespons
+		DialTimeout:  5 * time.Second, // Nyerah jika dalam 5 detik gagal konek awal
+		ReadTimeout:  3 * time.Second, // Nyerah jika Redis tidak membalas dalam 3 detik
+		WriteTimeout: 3 * time.Second, // Nyerah jika gagal mengirim data dalam 3 detik
 	})
 
 	// Test the connection

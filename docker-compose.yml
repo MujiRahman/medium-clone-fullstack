@@ -7,8 +7,23 @@ services:
       POSTGRES_USER: medium_user
       POSTGRES_PASSWORD: medium_password
       POSTGRES_DB: medium_clone
+    # Mengatur PostgreSQL untuk memanfaatkan RAM yang lega
+    command: 
+      - "postgres"
+      - "-c"
+      - "shared_buffers=1GB"    # Gunakan 1GB RAM khusus untuk cache database
+      - "-c"
+      - "max_connections=50"    # Batasi max koneksi DB di angka 50 agar aman
     ports:
       - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.2'        # Berikan jatah maksimal 1.2 Core untuk DB
+          memory: 4G         # Jatah RAM sangat lega (4 GB)
+        reservations:
+          cpus: '0.5'
+          memory: 1G
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -20,6 +35,14 @@ services:
       - "6379:6379"
     volumes:
       - redisdata:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
 
   minio:
     image: minio/minio:latest
@@ -34,6 +57,14 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 256M
 
   backend:
     build:
@@ -43,6 +74,14 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'        # Sisa 0.8 Core dialokasikan untuk Backend Golang
+          memory: 1G         # 1 GB RAM sudah sangat mewah untuk Golang
+        reservations:
+          cpus: '0.2'
+          memory: 128M
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -83,6 +122,14 @@ services:
       - INTERNAL_API_URL=http://backend:8080/api
     depends_on:
       - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 256M
 
 volumes:
   pgdata:

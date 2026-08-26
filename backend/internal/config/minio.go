@@ -3,7 +3,9 @@ package config
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -29,9 +31,16 @@ func InitMinIO() *minio.Client {
 		bucketName = "medium-uploads"
 	}
 
+	// Membuat HTTP Transport khusus dengan timeout
+	customTransport := &http.Transport{
+		MaxIdleConns:       100,
+		IdleConnTimeout:    90 * time.Second,
+		DisableCompression: true, // Jangan kompres gambar 2x (biar CPU hemat)
+	}
 	client, err := minio.New(endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(accessKey, secretKey, ""),
-		Secure: useSSL,
+		Creds:     credentials.NewStaticV4(accessKey, secretKey, ""),
+		Secure:    useSSL,
+		Transport: customTransport,
 	})
 	if err != nil {
 		log.Printf("Warning: Failed to initialize MinIO client: %v", err)
