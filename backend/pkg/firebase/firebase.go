@@ -1,0 +1,30 @@
+package firebase
+
+import (
+	"context"
+	"log"
+
+	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/auth"
+	"google.golang.org/api/option"
+)
+
+// InitAuth initializes the Firebase Admin SDK and returns the Auth client
+func InitAuth() *auth.Client {
+	ctx := context.Background()
+
+	// Adjust the path to where your service account file is located.
+	// We assume it's in the root of the backend folder or passed via ENV.
+	opt := option.WithCredentialsFile("firebase-service-account.json")
+	app, err := firebase.NewApp(ctx, nil, opt)
+	if err != nil {
+		log.Fatalf("error initializing firebase app: %v", err)
+	}
+
+	client, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("error getting firebase auth client: %v", err)
+	}
+
+	return client
+}

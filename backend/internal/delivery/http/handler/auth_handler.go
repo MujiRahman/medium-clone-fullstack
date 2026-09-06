@@ -80,6 +80,39 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	response.JSON(c, http.StatusOK, "Login successful", nil)
 }
 
+func (h *AuthHandler) LoginWithFirebase(c *gin.Context) {
+	var req struct {
+		IDToken string `json:"id_token" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.JSON(c, http.StatusBadRequest, "Invalid request body", nil)
+		return
+	}
+
+	token, err := h.authUseCase.LoginWithFirebase(req.IDToken)
+	if err != nil {
+		response.JSON(c, http.StatusUnauthorized, "Failed to authenticate with Firebase: "+err.Error(), nil)
+		return
+	}
+
+	// Set HttpOnly cookie
+	cookieSecure := os.Getenv("COOKIE_SECURE") == "true"
+	sameSiteMode := http.SameSiteLaxMode
+	if envSameSite := os.Getenv("COOKIE_SAMESITE"); envSameSite != "" {
+		switch envSameSite {
+		case "none":
+			sameSiteMode = http.SameSiteNoneMode
+		case "strict":
+			sameSiteMode = http.SameSiteStrictMode
+		}
+	}
+
+	c.SetSameSite(sameSiteMode)
+	c.SetCookie("jwt_token", token, 86400, "/", "", cookieSecure, true)
+
+	response.JSON(c, http.StatusOK, "Firebase Login successful", nil)
+}
+
 func (h *AuthHandler) Logout(c *gin.Context) {
 	cookieSecure := os.Getenv("COOKIE_SECURE") == "true"
 	sameSiteMode := http.SameSiteLaxMode

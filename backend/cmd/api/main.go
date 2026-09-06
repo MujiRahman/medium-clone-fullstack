@@ -11,6 +11,7 @@ import (
 	minioRepo "medium-clone/internal/repository/minio"
 	"medium-clone/internal/usecase"
 	jwtutils "medium-clone/pkg/jwt"
+	"medium-clone/pkg/firebase"
 
 	"github.com/joho/godotenv"
 )
@@ -30,7 +31,8 @@ func main() {
 
 	// 2. Init Repositories & Usecases
 	userRepo := postgres.NewUserRepository(db)
-	authUseCase := usecase.NewAuthUseCase(userRepo)
+	firebaseAuth := firebase.InitAuth()
+	authUseCase := usecase.NewAuthUseCase(userRepo, firebaseAuth)
 	
 	notificationRepo := postgres.NewNotificationRepository(db)
 	notifUseCase := usecase.NewNotificationUseCase(notificationRepo, userRepo, rdb)
