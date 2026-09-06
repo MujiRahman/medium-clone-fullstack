@@ -8,9 +8,13 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { useAuthStore } from "@/lib/store/authStore";
+import { auth, googleProvider, githubProvider } from "@/lib/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
   
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +37,24 @@ export default function RegisterPage() {
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
+    }
+  const handleFirebaseLogin = async (provider: any) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+      
+      await api.post("/auth/firebase-login", { id_token: idToken });
+      
+      login({ id: "unknown", username: result.user.email?.split("@")[0] || "user", email: result.user.email || "" });
+      
+      router.push("/");
+    } catch (err: any) {
+      console.error(err);
+      setError("Failed to sign in with provider. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -103,6 +125,26 @@ export default function RegisterPage() {
             {isLoading ? "Reticulating splines..." : "Create Account"}
           </Button>
         </form>
+
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <Button type="button" variant="outline" onClick={() => handleFirebaseLogin(githubProvider)} disabled={isLoading}>
+            GitHub
+          </Button>
+          <Button type="button" variant="outline" onClick={() => handleFirebaseLogin(googleProvider)} disabled={isLoading}>
+            Google
+          </Button>
+        </div>
 
         <div className="mt-6 text-center text-sm">
           <span className="text-muted-foreground">Already have an account? </span>
